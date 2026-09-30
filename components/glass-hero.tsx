@@ -1,14 +1,59 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Sparkles,
+  GraduationCap,
+  Cloud,
+} from "lucide-react";
+import styles from "./GlassHero.module.css";
+import scrollToSection from "./me4/scrollToSection";
+import Pop from "./me4/Pop";
+import Rise from "./me4/Rise";
 
 const DESKTOP_RADIUS = 235;
 const MOBILE_RADIUS = 150;
 
-export default function GlassHero() {
+export default function GlassHero({
+  onExplore,
+}: {
+  onExplore?: () => void;
+}) {
   const heroRef = useRef<HTMLElement | null>(null);
 
-  // Pointer position & animation state stored purely in refs (no React re-renders)
+  // Typewriter state for active roles
+  const roles = [
+    "AWS CLOUD ENGINEER",
+    "CLOUD SUPPORT ENGINEER",
+    "JUNIOR DEVOPS ENGINEER",
+  ];
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentRole = roles[roleIndex];
+    const speed = isDeleting ? 40 : 80;
+
+    const timer = setTimeout(() => {
+      if (!isDeleting && displayText === currentRole) {
+        setTimeout(() => setIsDeleting(true), 1800);
+      } else if (isDeleting && displayText === "") {
+        setIsDeleting(false);
+        setRoleIndex((prev) => (prev + 1) % roles.length);
+      } else {
+        setDisplayText(
+          isDeleting
+            ? currentRole.substring(0, displayText.length - 1)
+            : currentRole.substring(0, displayText.length + 1)
+        );
+      }
+    }, speed);
+
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, roleIndex]);
+
+  // ── Pointer position & animation state (all refs — no React re-renders) ─────
   const rawPosRef = useRef<{ x: number; y: number }>({ x: -999, y: -999 });
   const smoothPosRef = useRef<{ x: number; y: number }>({ x: -999, y: -999 });
   const currentRadiusRef = useRef<number>(0);
@@ -16,6 +61,7 @@ export default function GlassHero() {
   const isTrackingRef = useRef<boolean>(false);
   const frameIdRef = useRef<number | null>(null);
 
+  // ── Single RAF animation loop ────────────────────────────────────────────────
   useEffect(() => {
     const heroEl = heroRef.current;
     if (!heroEl) return;
@@ -46,7 +92,7 @@ export default function GlassHero() {
       currentRadiusRef.current +=
         (targetRadiusRef.current - currentRadiusRef.current) * radiusFactor;
 
-      // Update CSS variables directly on container element
+      // Write CSS variables directly on the hero element — no React setState
       heroEl.style.setProperty(
         "--reveal-x",
         `${smoothPosRef.current.x.toFixed(2)}px`
@@ -72,231 +118,190 @@ export default function GlassHero() {
     };
   }, []);
 
-  const updateRawPos = (e: React.PointerEvent<HTMLElement>) => {
-    if (!heroRef.current) return;
-    const rect = heroRef.current.getBoundingClientRect();
-    rawPosRef.current = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    };
-  };
+  // ── Mouse tracking via document.pointermove ──────────────────────────────────
+  // WHY document-level: every pointer move on the page fires on `document`,
+  // regardless of which element is under the cursor. This makes the listener
+  // immune to:
+  //   • pointer-events:none on portrait, grid, text, or content container
+  //   • the fixed Header (z-index 9990) sitting above the hero
+  //   • the fixed ParallaxBackground layer
+  //   • the hv-page / appWrapper stacking contexts from Me4App
+  //   • any Parallax wrapper div intercepting events
+  // We check hero bounds with getBoundingClientRect() on every move — fast,
+  // no layout thrash (read-only, no writes).
+  useEffect(() => {
+    const heroEl = heroRef.current;
+    if (!heroEl) return;
 
-  const handlePointerEnter = (e: React.PointerEvent<HTMLElement>) => {
-    if (e.pointerType === "mouse") {
-      updateRawPos(e);
-      if (smoothPosRef.current.x === -999) {
-        smoothPosRef.current = { ...rawPosRef.current };
-      }
-      targetRadiusRef.current = DESKTOP_RADIUS;
-    }
-  };
+    // Local state: whether cursor is currently inside hero bounds.
+    // Using a closure variable (not a ref) so it's scoped to this effect.
+    let mouseInside = false;
 
-  const handlePointerMove = (e: React.PointerEvent<HTMLElement>) => {
-    if (e.pointerType === "mouse") {
-      updateRawPos(e);
-      if (targetRadiusRef.current === 0) {
-        targetRadiusRef.current = DESKTOP_RADIUS;
-      }
-    } else {
-      // Touch or pen: update position only while tracking
-      if (isTrackingRef.current) {
-        updateRawPos(e);
-      }
-    }
-  };
+    // ── MOUSE ──────────────────────────────────────────────────────────────────
+    const onDocumentPointerMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
 
-  const handlePointerLeave = (e: React.PointerEvent<HTMLElement>) => {
-    if (e.pointerType === "mouse") {
-      targetRadiusRef.current = 0;
-    }
-  };
+      const rect = heroEl.getBoundingClientRect();
+      const inside =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
 
-  const handlePointerDown = (e: React.PointerEvent<HTMLElement>) => {
-    if (e.pointerType !== "mouse") {
-      isTrackingRef.current = true;
-      try {
-        if ("setPointerCapture" in e.target) {
-          (e.target as HTMLElement).setPointerCapture(e.pointerId);
+      if (inside) {
+        const pos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        rawPosRef.current = pos;
+
+        if (!mouseInside) {
+          // First move inside: snap smoothed position so reveal appears
+          // at cursor immediately, not lerping from (-999, -999)
+          mouseInside = true;
+          smoothPosRef.current = { ...pos };
+          targetRadiusRef.current = DESKTOP_RADIUS;
+        } else if (targetRadiusRef.current === 0) {
+          // Safety: if radius was closed (e.g. pointer leave edge case),
+          // snap and reopen on re-entry
+          smoothPosRef.current = { ...pos };
+          targetRadiusRef.current = DESKTOP_RADIUS;
         }
-      } catch {
-        // Fallback if capture fails
+        // Normal case: rawPosRef already updated above, RAF loop lerps it
+      } else if (mouseInside) {
+        // Cursor left the hero — smoothly contract the reveal
+        mouseInside = false;
+        targetRadiusRef.current = 0;
       }
-      updateRawPos(e);
-      smoothPosRef.current = { ...rawPosRef.current };
-      targetRadiusRef.current = MOBILE_RADIUS;
-    }
-  };
+    };
 
-  const handlePointerUpOrCancel = (e: React.PointerEvent<HTMLElement>) => {
-    if (e.pointerType !== "mouse" || isTrackingRef.current) {
+    // ── TOUCH / STYLUS ─────────────────────────────────────────────────────────
+    // Touch uses hero-element listeners with pointer capture so move events
+    // continue even if finger drifts outside the element bounds.
+    const onHeroPointerDown = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") return;
+      isTrackingRef.current = true;
+      try { heroEl.setPointerCapture(e.pointerId); } catch { /* noop */ }
+      const rect = heroEl.getBoundingClientRect();
+      const pos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      rawPosRef.current = pos;
+      smoothPosRef.current = { ...pos };
+      targetRadiusRef.current = MOBILE_RADIUS;
+    };
+
+    const onHeroTouchMove = (e: PointerEvent) => {
+      if (e.pointerType === "mouse" || !isTrackingRef.current) return;
+      const rect = heroEl.getBoundingClientRect();
+      rawPosRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      };
+    };
+
+    const onHeroPointerUpOrCancel = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") return;
       isTrackingRef.current = false;
       targetRadiusRef.current = 0;
-      try {
-        if ("releasePointerCapture" in e.target) {
-          (e.target as HTMLElement).releasePointerCapture(e.pointerId);
-        }
-      } catch {
-        // Fallback
-      }
-    }
-  };
+      try { heroEl.releasePointerCapture(e.pointerId); } catch { /* noop */ }
+    };
+
+    // Attach: mouse on document, touch on heroEl
+    document.addEventListener("pointermove", onDocumentPointerMove);
+    heroEl.addEventListener("pointerdown", onHeroPointerDown);
+    heroEl.addEventListener("pointermove", onHeroTouchMove);
+    heroEl.addEventListener("pointerup", onHeroPointerUpOrCancel);
+    heroEl.addEventListener("pointercancel", onHeroPointerUpOrCancel);
+
+    return () => {
+      document.removeEventListener("pointermove", onDocumentPointerMove);
+      heroEl.removeEventListener("pointerdown", onHeroPointerDown);
+      heroEl.removeEventListener("pointermove", onHeroTouchMove);
+      heroEl.removeEventListener("pointerup", onHeroPointerUpOrCancel);
+      heroEl.removeEventListener("pointercancel", onHeroPointerUpOrCancel);
+    };
+  }, []);
+
+  const statIcons = [GraduationCap, Cloud, Sparkles];
+  const statValues = [
+    "B.Sc. Computer Technology",
+    "AWS Cloud & DevOps",
+    "Fresher",
+  ];
+  const statLabels = ["EDUCATION", "CAREER FOCUS", "ENTRY LEVEL"];
 
   return (
     <section
+      id="overview"
       ref={heroRef}
-      onPointerEnter={handlePointerEnter}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUpOrCancel}
-      onPointerCancel={handlePointerUpOrCancel}
-      className="relative isolate overflow-hidden h-[100dvh] min-h-[42rem] min-w-[320px] touch-none select-none bg-[#edf5ff] text-[#0a0f18]"
-      aria-label="Hero showcase"
+      className={styles.heroSection}
+      aria-label="Hero Introduction"
     >
-      {/* 1. Base Portrait Layer */}
-      <div className="hero-bg-base z-0" aria-hidden="true" />
+      {/* Target Anchor for smooth scroll */}
+      <span id="hero" className="sr-only" aria-hidden="true" />
 
-      {/* 2. Reveal Portrait Layer (Liquid Glass Anatomical Version) */}
-      <div className="hero-bg-reveal z-10 pointer-events-none" aria-hidden="true" />
-
-      {/* 3. Technical Grid & Background Circle Layer */}
-      <div
-        className="absolute inset-0 z-20 pointer-events-none overflow-hidden"
-        aria-hidden="true"
-      >
-        {/* Technical Grid Lines */}
-        <div className="absolute inset-0 grid grid-cols-4 grid-rows-6 md:grid-cols-12 md:grid-rows-4 opacity-30 md:opacity-50">
-          {Array.from({ length: 48 }).map((_, i) => (
-            <div
-              key={i}
-              className="border-r border-b border-[#a5c0de]/35 last:border-r-0"
-            />
-          ))}
-        </div>
-
-        {/* Oversized Fine-Line Technical Circle */}
-        <div className="absolute rounded-full border border-[#96b8db]/45 w-[150vw] md:w-[min(78vw,72rem)] aspect-square left-[-76%] md:left-[8%] top-[-8%] md:top-[-36%] pointer-events-none" />
+      {/* Layer 1 & 2: Base & Reveal Portrait Layers */}
+      <div className={styles.portraitContainer} aria-hidden="true">
+        <div className={styles.portraitImgBase} />
+        <div className={styles.portraitImgReveal} />
       </div>
 
-      {/* 4. Navigation */}
-      <header className="absolute top-0 left-0 right-0 z-50 pt-[max(2.5rem,env(safe-area-inset-top))] px-[max(1.25rem,env(safe-area-inset-left))] md:px-[max(5.6vw,2rem)] pr-[max(1.25rem,env(safe-area-inset-right))] md:pr-[max(5.6vw,2rem)] animate-nav-down">
-        <nav
-          className="flex items-center justify-between w-full"
-          aria-label="Main Navigation"
-        >
-          {/* Brand Monogram & Name */}
-          <a
-            href="#"
-            className="flex items-center gap-3 group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0a0f18] rounded-md p-1 min-h-[44px]"
-          >
-            <span className="w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm border border-white/80 flex items-center justify-center shadow-xs group-hover:bg-white transition-colors">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4 stroke-[#0a0f18]"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                {/* Custom Monogram for 'A' */}
-                <path d="M12 3L3 21H7.5L12 11.5L16.5 21H21L12 3Z" />
-                <path d="M8.5 15H15.5" />
-              </svg>
-            </span>
-            <span className="font-mono text-xs md:text-sm uppercase tracking-widest font-semibold text-[#0a0f18]">
-              ALEX RIVERA
-            </span>
-          </a>
+      {/* Layer 3: Technical Background Grid & Ambient Glows */}
+      <div className={styles.gridLayer} aria-hidden="true" />
+      <div className={`${styles.glowOrb} ${styles.glowOrb1}`} aria-hidden="true" />
+      <div className={`${styles.glowOrb} ${styles.glowOrb2}`} aria-hidden="true" />
 
-          {/* Desktop Nav Links */}
-          <ul className="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-[#0a0f18]/80">
-            <li>
-              <a
-                href="#about"
-                className="hover:text-[#0a0f18] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a0f18] rounded px-1 py-0.5"
-              >
-                About
-              </a>
-            </li>
-            <li>
-              <a
-                href="#work"
-                className="hover:text-[#0a0f18] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a0f18] rounded px-1 py-0.5"
-              >
-                Work
-              </a>
-            </li>
-            <li>
-              <a
-                href="#process"
-                className="hover:text-[#0a0f18] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a0f18] rounded px-1 py-0.5"
-              >
-                Process
-              </a>
-            </li>
-            <li>
-              <a
-                href="#experiments"
-                className="hover:text-[#0a0f18] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a0f18] rounded px-1 py-0.5"
-              >
-                Experiments
-              </a>
-            </li>
-          </ul>
+      {/* Layer 4: Editorial Hero Text Content */}
+      {/* pointer-events:none on the container so the hero section below
+          always receives pointer events; interactive children (links,
+          buttons) override this back to auto via CSS. */}
+      <div className={`container ${styles.heroContentContainer}`}>
+        <div className={styles.heroWrapper}>
+          {/* Heading Section */}
+          <div className={styles.titleContainer}>
+            <Rise as="p" className={styles.greetingText}>Hello world, I am</Rise>
+            <Pop strength={14}>
+              <Rise as="h1" className={styles.mainTitle}>
+                HARSHAVARDHAN<br />
+                <span className={styles.titleInitial}>J</span>
+              </Rise>
+            </Pop>
+            <Pop strength={9}>
+              <Rise as="p" className={styles.heroTagline}>AWS CLOUD &times; DEVOPS</Rise>
+            </Pop>
+          </div>
 
-          {/* CTA Link / Button */}
-          <a
-            href="mailto:hello@alexrivera.design"
-            target="_blank"
-            rel="noreferrer"
-            className="bg-white text-[#0a0f18] font-mono text-xs uppercase tracking-wider px-5 py-2.5 rounded-full border border-white/80 shadow-xs hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a0f18] min-h-[44px] inline-flex items-center justify-center font-medium"
-          >
-            Let's talk
-          </a>
-        </nav>
-      </header>
+          {/* Dynamic Role Typewriter Bar */}
+          <Pop strength={7}>
+            <Rise as="div" className={styles.roleBar}>
+              <span className={styles.rolePrefix}>$ ACTIVE_ROLE:</span>
+              <span className={styles.typingRole}>{displayText}</span>
+              <span className={styles.cursorBlink}>|</span>
+            </Rise>
+          </Pop>
 
-      {/* 5. Editorial Content Overlay Layer */}
-      <div className="absolute inset-0 z-40 pointer-events-none">
-        {/* Main Headline */}
-        <div className="absolute top-[15%] md:top-[34%] left-[max(1.25rem,env(safe-area-inset-left))] md:left-[max(5.6vw,2rem)] max-w-[62%] md:max-w-none min-w-[280px]">
-          <h1 className="font-sans font-light tracking-[-0.085em] text-[#0a0f18] text-[clamp(2.7rem,12.5vw,3.8rem)] leading-[0.87] md:text-[clamp(5.4rem,6.2vw,6.8rem)] md:leading-[0.93]">
-            <span className="block animate-line-1">BUILDING</span>
-            <span className="block animate-line-2">BEYOND</span>
-            <span className="block animate-line-3">POSSIBLE.</span>
-          </h1>
-        </div>
+          {/* Hero Subtitle / Summary */}
+          <Pop strength={8}>
+            <Rise as="p" className={styles.heroDescription}>
+              Building practical skills in AWS Cloud and DevOps, with a focus on
+              cloud infrastructure, automation, containers, CI/CD, and reliable
+              application deployment.
+            </Rise>
+          </Pop>
 
-        {/* Tagline on the Right */}
-        <div className="absolute top-[55%] md:top-[50%] md:-translate-y-1/2 right-[max(1.25rem,env(safe-area-inset-right))] md:right-[max(5.6vw,2rem)] text-right animate-tagline-up">
-          <p className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-[#0a0f18]/70 leading-relaxed">
-            BUILDING THE
-            <br />
-            NEXT VERSION
-            <br />
-            IN PUBLIC
-          </p>
-        </div>
-
-        {/* Bottom Left Intro & CTA Button */}
-        <div className="absolute bottom-[max(2rem,env(safe-area-inset-bottom))] left-[max(1.25rem,env(safe-area-inset-left))] md:left-[max(5.6vw,2rem)] max-w-[85vw] md:max-w-md animate-intro-up">
-          <p className="font-sans text-sm md:text-base text-[#0a0f18]/85 leading-relaxed mb-4">
-            Architecting fluid digital experiences at the intersection of
-            design, code, and intelligence.
-          </p>
-
-          <a
-            href="mailto:hello@alexrivera.design"
-            target="_blank"
-            rel="noreferrer"
-            className="pointer-events-auto bg-white text-[#0a0f18] font-mono text-xs uppercase tracking-wider px-6 py-3 rounded-full border border-white/80 shadow-xs hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a0f18] min-h-[44px] inline-flex items-center justify-center font-medium"
-          >
-            Explore my work
-          </a>
+          {/* Information Metric Cards */}
+          <div className={styles.metricsGrid}>
+            {statValues.map((val, idx) => {
+              const StatIcon = statIcons[idx % statIcons.length];
+              return (
+                <Pop key={idx} strength={5} className="pop-stretch">
+                  <Rise as="div" className={styles.metricCard}>
+                    <div className={styles.metricHeader}>
+                      <StatIcon size={16} className={styles.primaryIcon} />
+                      <span className={styles.metricValue}>{val}</span>
+                    </div>
+                    <span className={styles.metricLabel}>{statLabels[idx]}</span>
+                  </Rise>
+                </Pop>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

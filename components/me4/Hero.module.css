@@ -1,0 +1,213 @@
+.heroSection {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  padding-top: 140px;
+  padding-bottom: 80px;
+  position: relative;
+  z-index: 2;
+}
+
+.heroWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 980px;
+}
+
+.terminalMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.metaBadge, .locationTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.06em;
+}
+
+.primaryIcon {
+  color: var(--primary);
+}
+
+.titleContainer {
+  margin-bottom: 1.5rem;
+}
+
+.greetingText {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  letter-spacing: 0.22em;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.mainTitle {
+  /* Responsive font-size: Desktop 80-90px, Tablet 60-70px, Mobile 42-52px */
+  font-size: clamp(5rem, 5.8vw, 5.625rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 1024px) {
+  .mainTitle {
+    font-size: clamp(3.75rem, 6.5vw, 4.375rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .mainTitle {
+    font-size: clamp(2.625rem, 9.5vw, 3.25rem);
+  }
+}
+
+.titleInitial {
+  color: var(--primary);
+  text-shadow: var(--glow-accent-strong);
+}
+
+.heroTagline {
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 2.4vw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+
+.roleBar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(17, 29, 31, 0.9);
+  border: 1px solid var(--border-accent);
+  padding: 0.65rem 1.2rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  color: var(--text);
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.rolePrefix {
+  color: var(--secondary);
+  font-weight: 600;
+}
+
+.typingRole {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.cursorBlink {
+  color: var(--primary);
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.heroDescription {
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  line-height: 1.7;
+  color: #d8d8d8;
+  max-width: 760px;
+  margin-bottom: 2.5rem;
+}
+
+.ctaGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-bottom: 4rem;
+}
+
+.metricsGrid {
+  display: grid;
+  /* Three equal boxes: minmax(0, 1fr) removes the content-based minimum
+     that made tracks uneven (long text skewed its column wider). */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+}
+
+@media (max-width: 860px) {
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metricCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 1.35rem 1.1rem;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+
+  /* Internal text alignment only: the whole content block (heading +
+     label) sits centered in the card. Dimensions are untouched. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.metricCard:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-3px);
+  box-shadow: var(--glow-accent);
+}
+
+.metricHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.metricValue {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+}
+
+.metricLabel {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+}

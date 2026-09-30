@@ -1,0 +1,149 @@
+.aboutGrid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  /* Narrower gutter keeps the two cards reading as one row (audit #9/#10) */
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  .aboutGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mainBioCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.iconAccent {
+  color: var(--primary);
+}
+
+.cardTitle {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  letter-spacing: 0.12em;
+  color: var(--primary);
+}
+
+/* Card-level titles share one style regardless of which card they head
+   (audit #15: locationTitle was display-font/white while cardTitle was
+   mono/lime — same hierarchy level, so they now match). */
+.locationTitle {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  letter-spacing: 0.12em;
+  color: var(--primary);
+}
+
+.paragraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bioPara {
+  color: #d4d4d4;
+  font-size: var(--text-lg);
+  line-height: 1.7;
+  /* Left-aligned (audit #12 pattern): justified narrow columns create
+     distracting "rivers" of whitespace. */
+  text-align: left;
+}
+
+/* Legacy variant class — now left-aligned like the rest of the page
+   after the justified-text audit fix; kept so existing JSX keeps working. */
+.subtitleJustified {
+  text-align: left;
+}
+
+.bioHighlights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+
+.locationCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.locationHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.locationTitle {
+  /* Matches .cardTitle — see the shared card-title block above. */
+}
+
+.locationSub {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.locationDesc {
+  font-size: var(--text-base);
+  color: #b5b5b5;
+  line-height: 1.6;
+}
+
+
+
+
+.statusBox {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-pill);
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  /* Glow removed (audit #11): the badge was out-shouting the section's
+     primary CTA. The dot alone still reads as "live". */
+}
+
+.statusText {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+
+
+

@@ -1,0 +1,70 @@
+.cursorDot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  margin-top: -3px;
+  margin-left: -3px;
+  transition: transform 0.05s ease-out, background-color 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 0 10px var(--primary);
+}
+
+.cursorRing {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid rgba(215, 255, 0, 0.6);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  margin-top: -16px;
+  margin-left: -16px;
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              margin 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease,
+              background-color 0.2s ease,
+              box-shadow 0.2s ease;
+  backdrop-filter: invert(0.1);
+}
+
+.dotHover {
+  background-color: #ffffff;
+  transform: scale(1.5);
+}
+
+.dotClick {
+  transform: scale(0.6);
+}
+
+.ringHover {
+  width: 54px;
+  height: 54px;
+  margin-top: -27px;
+  margin-left: -27px;
+  border-color: var(--primary);
+  background-color: rgba(215, 255, 0, 0.07);
+  box-shadow: 0 0 20px rgba(215, 255, 0, 0.35);
+}
+
+.ringClick {
+  width: 24px;
+  height: 24px;
+  margin-top: -12px;
+  margin-left: -12px;
+  border-color: #ffffff;
+}
+
+@media (pointer: coarse) {
+  .cursorDot,
+  .cursorRing {
+    display: none !important;
+  }
+}

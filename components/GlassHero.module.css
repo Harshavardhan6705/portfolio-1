@@ -1,0 +1,470 @@
+.heroSection {
+  /* Exactly one viewport height — no taller, no shorter */
+  height: 100dvh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  padding-top: 130px;
+  padding-bottom: 70px;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  background-color: #071011;
+  touch-action: none;
+}
+
+/* Layer 1 & 2: Portrait Container — full-bleed, fills the section exactly */
+.portraitContainer {
+  position: absolute;
+  inset: 0;           /* top:0 right:0 bottom:0 left:0 */
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   DESKTOP PORTRAIT LAYERS  (default — 16:9 images, 1672×941)
+   Both layers are pixel-identical so the reveal mask aligns perfectly.
+   background-size:cover fills the viewport; background-position:center keeps
+   the subject centred.  No max-width or centering transform needed.
+───────────────────────────────────────────────────────────────────────────── */
+
+/* 1. Base Portrait Image Layer */
+.portraitImgBase {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/images/Base_image_desktop.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  will-change: transform, opacity;
+  animation: heroImageEntrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 2. Reveal Portrait Image Layer (Exact Radial Mask) */
+.portraitImgReveal {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Identical sizing/position to base — mask is the only difference */
+  background-image: url('/images/Reveal_image_desktop.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  pointer-events: none;
+  z-index: 2;
+  -webkit-mask-image: radial-gradient(
+    circle var(--reveal-radius, 0px) at var(--reveal-x, -999px) var(--reveal-y, -999px),
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(255, 255, 255, 0.94) 62%,
+    rgba(255, 255, 255, 0.72) 76%,
+    rgba(255, 255, 255, 0.28) 90%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle var(--reveal-radius, 0px) at var(--reveal-x, -999px) var(--reveal-y, -999px),
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(255, 255, 255, 0.94) 62%,
+    rgba(255, 255, 255, 0.72) 76%,
+    rgba(255, 255, 255, 0.28) 90%,
+    transparent 100%
+  );
+}
+
+@keyframes heroImageEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(1.035);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Layer 3: Technical Background Grid and Atmospheric Glows */
+.gridLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.glowOrb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.glowOrb1 {
+  top: -100px;
+  right: -100px;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(215, 255, 0, 0.18) 0%, transparent 70%);
+}
+
+.glowOrb2 {
+  top: 40%;
+  left: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(215, 255, 0, 0.1) 0%, transparent 70%);
+}
+
+/* Layer 4 content container — pointer-events:none lets the section
+   below receive all pointer events. Interactive children (a, button)
+   are naturally exempt: browsers restore pointer-events for them.
+
+   IMPORTANT: The parent .container class applies max-width:1280px +
+   margin:auto which pushes this ~80-340px from the left edge depending
+   on viewport width.  We override that here so the hero text always
+   starts at approximately 80-100px from the LEFT viewport edge. */
+.heroContentContainer {
+  /* Override the centered .container auto-margin */
+  position: absolute !important;
+  inset: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  /* Stretch to full hero height so flex-alignment works */
+  display: flex;
+  align-items: center;
+  padding-left: clamp(80px, 5.5vw, 100px);
+  padding-right: clamp(40px, 3vw, 60px);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Re-enable pointer events on all interactive children */
+.heroContentContainer a,
+.heroContentContainer button,
+.heroContentContainer input,
+.heroContentContainer textarea,
+.heroContentContainer select,
+.heroContentContainer [role="button"],
+.heroContentContainer [tabindex] {
+  pointer-events: auto;
+}
+
+/* Layer 4: Editorial Hero Text Content */
+.heroWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* Allow the content column to grow wider now that the
+     left-offset is controlled by heroContentContainer padding */
+  max-width: 680px;
+  width: 100%;
+  position: relative;
+  z-index: 4;
+  /* Push content group ~40px lower than the vertical centre
+     without affecting the portrait layers */
+  margin-top: 40px;
+}
+
+/* Desktop/laptop (≥768px): widen the hero column so the description
+   fits on EXACTLY two lines (its full text measures ≈1955px at the
+   19.2px font — needs ≈1000px). The metric grid is capped back to its
+   original 680px so the three boxes keep their exact previous size. */
+@media (min-width: 768px) {
+  .heroWrapper {
+    max-width: 1040px;
+  }
+
+  .metricsGrid {
+    max-width: 680px;
+  }
+}
+
+.titleContainer {
+  margin-bottom: 1.5rem;
+}
+
+.greetingText {
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+  letter-spacing: 0.22em;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+  /* Sentence case per usability audit (17-char all-caps run). */
+}
+
+/* Desktop/laptop only: push the greeting clearly below the fixed header
+   so it never visually collides with the header name. */
+@media (min-width: 768px) {
+  .greetingText {
+    margin-top: 56px;
+  }
+}
+
+.mainTitle {
+  font-family: var(--font-display);
+  /* Responsive font-size: Desktop 57.5-66px (reduced ~12.5% per request),
+     Tablet 55-65px and Mobile 40-48px keep their own rules below. */
+  font-size: clamp(3.59375rem, 4.2vw, 4.125rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 1024px) {
+  .mainTitle {
+    font-size: clamp(3.4375rem, 6.2vw, 4.0625rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .mainTitle {
+    font-size: clamp(2.5rem, 9vw, 3rem);
+  }
+}
+
+.titleInitial {
+  color: var(--primary);
+  text-shadow: var(--glow-accent-strong);
+}
+
+.heroTagline {
+  font-family: var(--font-mono);
+  font-size: clamp(var(--text-base), 2.2vw, var(--text-xl));
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+
+.roleBar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(17, 29, 31, 0.9);
+  border: 1px solid var(--border-accent);
+  padding: 0.65rem 1.2rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  color: var(--text);
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.rolePrefix {
+  color: var(--secondary);
+  font-weight: 600;
+}
+
+.typingRole {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.cursorBlink {
+  color: var(--primary);
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.heroDescription {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  line-height: 1.7;
+  color: #d8d8d8;
+  /* Wide enough on laptop/desktop for exactly two lines (see the
+     .heroWrapper media query above); harmless on mobile where the
+     description is hidden. */
+  max-width: 1000px;
+  margin-bottom: 2.5rem;
+}
+
+.metricsGrid {
+  display: grid;
+  /* Strict equal-width columns — no minmax so no card can grow wider */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MOBILE PORTRAIT  ≤767px  (9:16 images, 941×1672)
+   Container and both layers fill the complete 100dvh hero.
+   background-size:cover fills edge-to-edge; background-position:center center
+   keeps the subject centred.  Both layers share the same rectangle.
+───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) and (orientation: portrait) {
+  .portraitContainer {
+    /* Fill the entire hero — no centering transform, no partial height */
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+  }
+
+  /* Switch to the 9:16 mobile asset pair */
+  .portraitImgBase {
+    background-image: url('/images/Base_image_mobile.png');
+    background-size: cover;
+    background-position: center center;
+  }
+
+  /* Reveal layer — pixel-identical rectangle to base */
+  .portraitImgReveal {
+    background-image: url('/images/Reveal_image_mobile.png');
+    background-size: cover;
+    background-position: center center;
+  }
+
+  .heroSection {
+    padding-top: 120px;
+  }
+
+  /* On mobile, reduce left padding so content isn't too far from edge */
+  .heroContentContainer {
+    padding-left: 20px;
+    padding-right: 20px;
+    align-items: flex-start;
+    padding-top: 120px;
+  }
+
+  .heroWrapper {
+    max-width: 100%;
+  }
+
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MOBILE LANDSCAPE  ≤767px wide but landscape orientation
+   Viewport is now wider than tall — revert to the 16:9 desktop pair.
+   Container and both layers remain full-bleed (inset:0).
+───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) and (orientation: landscape) {
+  .portraitContainer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+  }
+
+  /* Revert to the 16:9 desktop pair */
+  .portraitImgBase {
+    background-image: url('/images/Base_image_desktop.png');
+    background-size: cover;
+    background-position: center center;
+  }
+
+  /* Reveal layer — pixel-identical rectangle to base */
+  .portraitImgReveal {
+    background-image: url('/images/Reveal_image_desktop.png');
+    background-size: cover;
+    background-position: center center;
+  }
+}
+
+@media (max-width: 540px) {
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metricCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 1.35rem 0.85rem;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  /* Prevent any child from bleeding outside the card */
+  overflow: hidden;
+}
+
+.metricCard:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-3px);
+  box-shadow: var(--glow-accent);
+}
+
+.metricHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.metricValue {
+  font-family: var(--font-display);
+  /* Responsive size: shrinks on narrow cards so text wraps without overflow */
+  font-size: clamp(var(--text-md), 1.8vw, var(--text-xl));
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+  /* Allow long words to wrap inside the card */
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: auto;
+}
+
+.metricLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MOBILE ONLY (≤767px): strip the hero down to greeting + name + portrait.
+   Hides tagline (AWS CLOUD × DEVOPS), role bar ($ ACTIVE_ROLE: …), the
+   description paragraph, and all three metric boxes. Desktop is unaffected.
+───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .heroTagline,
+  .roleBar,
+  .heroDescription,
+  .metricsGrid {
+    display: none;
+  }
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  .portraitImgBase {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

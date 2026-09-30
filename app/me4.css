@@ -1,0 +1,595 @@
+/* ==========================================================================
+   HARSHAVARDHAN J — PORTFOLIO DESIGN SYSTEM & GLOBAL STYLES
+   Design: Dark & Modern (Cyber Minimalist / Techy & Innovative)
+   Colors:
+     Primary: #d7ff00 (Electric Cyber Lime)
+     Accent: #d7ff00
+     Background: #071112 (Deep Obsidian Black)
+     Text: #f5f5f5 (Bright Off-White)
+     Secondary: #777777 (Neutral Slate)
+   Typography:
+     Display Headings: 'Syne', sans-serif
+     Technical / Metadata: 'JetBrains Mono', monospace
+     Body: 'Inter', sans-serif
+   ========================================================================== */
+
+.hv-page {
+  /* Color Palette */
+  --primary: #d7ff00;
+  --primary-rgb: 215, 255, 0;
+  --accent: #d7ff00;
+  --bg: #071112;
+  --bg-rgb: 10, 10, 10;
+  --bg-card: rgba(17, 29, 31, 0.75);
+  --bg-card-hover: rgba(23, 35, 37, 0.9);
+  --bg-subtle: #0b181a;
+  --bg-elevated: #0e1f21;
+  --text: #f5f5f5;
+  --text-muted: #888888;
+  --secondary: #777777;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(215, 255, 0, 0.25);
+  --border-accent-strong: rgba(215, 255, 0, 0.55);
+  --glow-accent: 0 0 25px rgba(215, 255, 0, 0.2);
+  --glow-accent-strong: 0 0 40px rgba(215, 255, 0, 0.35);
+
+  /* Typography */
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Spacing System */
+  --section-spacing-desktop: 120px;
+  --section-spacing-mobile: 70px;
+  --container-max-width: 1280px;
+  --container-padding: 24px;
+
+  /* Radius & Transitions */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* TYPE SCALE (usability audit #1): one shared ladder instead of
+     ad-hoc sizes. All mono micro-text and body copy MUST use one of
+     these — no more one-off 0.7/0.72/0.74/0.78/0.8/0.85/0.88 values.
+       xs    12px  micro labels, badges, chips
+       sm    13px  small labels, meta rows
+       md    14px  emphasised small text, greetings
+       base  15px  body copy, inputs, descriptions
+       lg    17px  large body / subtitles */
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-md: 0.875rem;
+  --text-base: 0.9375rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.25rem;
+}
+
+
+
+/* CSS Reset & Core Standards */
+:where(.hv-page) *, :where(.hv-page) *::before, :where(.hv-page) *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+.hv-page {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  background-color: var(--bg);
+  color: var(--text);
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+
+.hv-page {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+  selection-background-color: var(--primary);
+  selection-color: #000;
+}
+
+
+
+:where(.hv-page) ::selection, :where(.hv-page) *::selection {
+  background: var(--primary);
+  color: #000000;
+}
+
+
+
+/* Typography Defaults */
+:where(.hv-page) h1, :where(.hv-page) h2, :where(.hv-page) h3, :where(.hv-page) h4, :where(.hv-page) h5, :where(.hv-page) h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+
+
+:where(.hv-page) p {
+  color: #d1d1d1;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+
+
+:where(.hv-page) a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+
+
+:where(.hv-page) button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  color: inherit;
+}
+
+
+
+:where(.hv-page) img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+
+/* Layout Helpers */
+:where(.hv-page) .container {
+  max-width: var(--container-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+  width: 100%;
+}
+
+
+
+:where(.hv-page) .section {
+  padding-top: var(--section-spacing-desktop);
+  padding-bottom: var(--section-spacing-desktop);
+  position: relative;
+  z-index: 2;
+}
+
+
+
+@media (max-width: 768px)  {
+
+  :where(.hv-page) .section {
+    padding-top: var(--section-spacing-mobile);
+    padding-bottom: var(--section-spacing-mobile);
+  }
+
+
+
+}
+
+
+
+/* Section Header Component Styling */
+:where(.hv-page) .section-header {
+  margin-bottom: 3.5rem;
+  position: relative;
+}
+
+
+
+:where(.hv-page) .section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--primary);
+  margin-bottom: 0.85rem;
+  background: rgba(215, 255, 0, 0.08);
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(215, 255, 0, 0.2);
+}
+
+
+
+:where(.hv-page) .section-title {
+  /* Desktop: capped at 55px — the measured maximum at which the Profile
+     heading's first line fits the 1232px container, keeping the explicit
+     two-line break intact. Sentence case + 1.2 line-height per usability
+     audit (long all-caps runs are hard to read; tight leading cramped
+     two-line headings). */
+  font-size: clamp(2.75rem, 3.82vw, 3.4375rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+/* Tablet: sized so the Profile heading's first line still fits on one
+   line down to 768px (max ≈ 41px at 1024px, ≈ 31px at 768px). */
+@media (max-width: 1024px) {
+  :where(.hv-page) .section-title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+  }
+}
+
+/* Mobile: targets 34-42px, floored at 28px on the narrowest phones —
+   the longest line of the Profile heading needs ≈11.1px of width per
+   px of font size and the 390px container is ≈325px wide, capping the
+   size at ≈29px. The two-line break is kept; longer lines wrap
+   naturally on narrow screens. */
+@media (max-width: 640px) {
+  :where(.hv-page) .section-title {
+    font-size: clamp(1.75rem, 7.4vw, 2.625rem);
+  }
+}
+
+
+
+:where(.hv-page) .section-title span.accent {
+  color: var(--primary);
+  text-shadow: 0 0 20px rgba(215, 255, 0, 0.3);
+}
+
+
+
+:where(.hv-page) .section-subtitle {
+  max-width: 680px;
+  color: var(--text-muted);
+  font-size: var(--text-lg);
+  font-family: var(--font-body);
+}
+
+
+
+/* Card Grid Layouts — align-items:start lets each card size to its own
+   content instead of stretching short cards into whitespace. */
+:where(.hv-page) .grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 2rem;
+  align-items: start;
+}
+
+
+
+@media (max-width: 640px)  {
+
+  :where(.hv-page) .grid-cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+
+
+}
+
+
+
+:where(.hv-page) .glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.2rem;
+  transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal), background-color var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+
+
+:where(.hv-page) .glass-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--border-accent);
+  background: var(--bg-card-hover);
+  box-shadow: var(--glow-accent);
+}
+
+
+
+/* Buttons */
+:where(.hv-page) .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: var(--primary);
+  color: #000000;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--text-base);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.9rem 1.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--primary);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+
+
+:where(.hv-page) .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(215, 255, 0, 0.45);
+  background: #e4ff33;
+}:where(.hv-page) .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-weight: 600;
+
+
+
+  font-size: var(--text-base);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.9rem 1.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+
+
+:where(.hv-page) .btn-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(215, 255, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+
+
+/* Tech Badges */
+:where(.hv-page) .badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e0e0e0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  letter-spacing: 0.04em;
+  transition: all var(--transition-fast);
+}
+
+
+
+:where(.hv-page) .badge:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(215, 255, 0, 0.08);
+}
+
+
+
+:where(.hv-page) .badge-accent {
+  background: rgba(215, 255, 0, 0.1);
+  color: var(--primary);
+  border-color: rgba(215, 255, 0, 0.3);
+}
+
+
+
+/* Custom Scrollbar */
+:where(.hv-page) ::-webkit-scrollbar {
+  width: 8px;
+}
+
+
+
+:where(.hv-page) ::-webkit-scrollbar-track {
+  background: #071112;
+}
+
+
+
+:where(.hv-page) ::-webkit-scrollbar-thumb {
+  background: #1e3335;
+  border-radius: 4px;
+  border: 2px solid #071112;
+}
+
+
+
+:where(.hv-page) ::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+
+
+/* Focus Visible for WCAG Accessibility */
+:where(.hv-page) a:focus-visible, :where(.hv-page) button:focus-visible, :where(.hv-page) input:focus-visible, :where(.hv-page) textarea:focus-visible, :where(.hv-page) select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+
+
+/* Utility Animations */
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.85; }
+}
+
+
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+
+
+/* ============================================================
+   RISE — Canva-style entrance animation (replaces the old
+   fade-in-element / reveal / card-enter systems).
+
+   Every text and image element enters from slightly below its final
+   position and smoothly rises upward into place:
+     BEFORE  opacity: 0 · translateY(35px)
+     DURING  ↑ ↑ smoothly rises
+     AFTER   final position · opacity: 1
+
+   Triggered independently per element by its own IntersectionObserver
+   (Rise.jsx); per Canva's "Both" mode the trigger re-arms when the
+   element leaves the viewport so the rise replays on return.
+
+   The entrance is a one-shot KEYFRAME, so hover/press transforms on
+   buttons and cards keep working untouched afterwards.
+   ============================================================ */
+.rise {
+  --rise-y: 35px;
+
+  opacity: 0;
+  /* The transform transition keeps card/button hover transforms smooth
+     after the entrance keyframe finishes. */
+  transition: opacity 0.25s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.rise-visible {
+  opacity: 1;
+  animation: riseEnter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes riseEnter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise-y));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Carrier variants — keep layout neutral, same conventions as the
+   pop-* carriers: .rise-flex for inline elements (transform does not
+   apply to plain inline boxes), .rise-stretch for grid/flex children,
+   .rise-ib for inline tags/labels/badges that must stay on the text
+   flow but still need a working transform. */
+.rise-flex {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
+}
+
+.rise-ib {
+  display: inline-block;
+}
+
+.rise-stretch > * {
+  height: 100%;
+}
+
+/* Smaller screens: shorter travel so the rise stays smooth. */
+@media (max-width: 640px) {
+  .rise {
+    --rise-y: 20px;
+  }
+}
+
+/* Reduced motion: no movement, no fade — content shows immediately. */
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    opacity: 1;
+    transition: none;
+    will-change: auto;
+  }
+
+  .rise-visible {
+    animation: none;
+  }
+}
+
+
+
+/* In-page navigation: keep section headings clear of the fixed header
+   (header ≈ 80–90px tall) when scrollIntoView lands on a section. */
+:where(.hv-page) section[id] {
+  scroll-margin-top: 96px;
+}
+
+
+
+/* ============================================================
+   POP MOTION system — layout-neutral transform carriers.
+   Direction-driven: scrolling down drifts elements ↑ toward the top
+   exit edge, scrolling up drifts them ↓ toward the bottom exit edge,
+   and when scrolling stops everything springs back to rest.
+
+   .pop-motion  block wrapper used around whole components
+                (cards/buttons) that have their own hover
+                transforms, so pop motion never overwrites them.
+   .pop-inner   block box used INSIDE reveal-animated elements,
+                so reveal (on the element) and pop motion (on the
+                inner box) never fight over one transform.
+   .pop-flex    inline-flex variant matching button internals.
+   .pop-stretch keeps grid/flex stretch behavior intact when a
+                card is wrapped (child fills the wrapper).
+   No margins/padding/sizing are set — document flow is unchanged.
+   ============================================================ */
+.pop-motion,
+.pop-inner {
+  display: block;
+  will-change: transform;
+}
+
+.pop-flex {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
+  will-change: transform;
+}
+
+.pop-stretch > * {
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop-motion,
+  .pop-inner,
+  .pop-flex {
+    transform: none !important;
+    will-change: auto;
+  }
+}
+
+

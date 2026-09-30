@@ -1,9 +1,9 @@
-import GlassHero from "@/components/glass-hero";
+import SinglePortfolio from "@/components/SinglePortfolio";
 
 export default function Page() {
   return (
-    <main className="w-full h-full min-h-screen">
-      <GlassHero />
+    <main className="w-full min-h-screen">
+      <SinglePortfolio />
     </main>
   );
 }

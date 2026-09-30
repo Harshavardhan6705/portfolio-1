@@ -1,0 +1,25 @@
+.appWrapper {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+.mainContainer {
+  position: relative;
+  z-index: 2;
+  min-height: calc(100vh - 200px);
+}
+
+.pageViewPadding {
+  padding-top: 120px;
+  padding-bottom: 60px;
+  min-height: 80vh;
+}
+
+@media (max-width: 768px) {
+  .pageViewPadding {
+    padding-top: 90px;
+  }
+}
