@@ -1,6 +1,8 @@
 .heroSection {
-  /* Exactly one viewport height — no taller, no shorter */
-  height: 100dvh;
+  /* At least one viewport tall — min-height (not a fixed height) so the
+     page can never be locked to exactly one screen (mobile scroll fix).
+     In practice content fits one viewport, so the rendered height is
+     unchanged on desktop/tablet. */
   min-height: 100dvh;
   display: flex;
   align-items: center;
@@ -10,7 +12,14 @@
   z-index: 2;
   overflow: hidden;
   background-color: #071011;
-  touch-action: none;
+  /* MOBILE SCROLL FIX: was `touch-action: none`, which told the browser
+     to swallow ALL touch gestures inside the hero — vertical swipes
+     could never scroll the page. `pan-y` keeps vertical swipe-to-scroll
+     native while taps/stationary touches still reach the radial reveal
+     handlers (a committed swipe fires pointercancel, which the reveal
+     code already handles by closing the circle). Mouse behavior on
+     desktop is unaffected — touch-action only governs touch input. */
+  touch-action: pan-y;
 }
 
 /* Layer 1 & 2: Portrait Container — full-bleed, fills the section exactly */

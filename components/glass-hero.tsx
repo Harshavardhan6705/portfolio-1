@@ -11,8 +11,10 @@ import scrollToSection from "./me4/scrollToSection";
 import Pop from "./me4/Pop";
 import Rise from "./me4/Rise";
 
-const DESKTOP_RADIUS = 235;
-const MOBILE_RADIUS = 150;
+// Reveal circle radii — increased 35% from the original 235/150 (audit request:
+// 100% → 135%). Desktop ≈317px, mobile ≈203px.
+const DESKTOP_RADIUS = 317;
+const MOBILE_RADIUS = 203;
 
 export default function GlassHero({
   onExplore,
