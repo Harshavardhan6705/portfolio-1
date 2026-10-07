@@ -63,6 +63,7 @@ export const projectsData = [
     tagline: "Phishing detection and risk scoring for suspicious links",
     description: "A cybersecurity web application that analyzes URLs, detects phishing indicators, calculates risk scores, and classifies websites as Safe, Suspicious, or Dangerous.",
     image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=800&auto=format&fit=crop",
+    repoUrl: "https://github.com/Harshavardhan6705/SecureLink-AI",
     fullImage: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=1600&auto=format&fit=crop",
     tags: ["Python", "Web Application", "Cybersecurity", "Phishing Detection"]
   },
@@ -73,6 +74,7 @@ export const projectsData = [
     tagline: "Turning programming errors into beginner-friendly guidance",
     description: "An AI-powered tool that converts programming errors into simple explanations and provides debugging suggestions to help beginners understand and resolve coding issues.",
     image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=800&auto=format&fit=crop",
+    repoUrl: "https://github.com/Harshavardhan6705/Error-Explanation-assistant-",
     fullImage: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1600&auto=format&fit=crop",
     tags: ["AI", "Python", "Debugging", "Education"]
   }
@@ -81,7 +83,7 @@ export const projectsData = [
 export const learningJourney = [
   {
     year: "2023 — 2026",
-    role: "Sri Krishna Arts and Science College",
+    role: "Sri Krishna Arts and Science College, Coimbatore",
     milestone: "B.Sc. Computer Technology",
     description: "Built a foundation in computer technology through coursework and hands-on project work spanning programming, networks, operating systems, and software development practices."
   },
