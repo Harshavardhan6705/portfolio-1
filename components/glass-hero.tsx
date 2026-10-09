@@ -11,8 +11,8 @@ import scrollToSection from "./me4/scrollToSection";
 import Pop from "./me4/Pop";
 import Rise from "./me4/Rise";
 
-const DESKTOP_RADIUS = 235;
-const MOBILE_RADIUS = 150;
+const DESKTOP_RADIUS = 323; // 380 - 15%
+const MOBILE_RADIUS = 207; // 244 - 15%
 
 export default function GlassHero({
   onExplore,

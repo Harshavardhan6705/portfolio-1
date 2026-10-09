@@ -10,7 +10,9 @@
   z-index: 2;
   overflow: hidden;
   background-color: var(--bg);
-  touch-action: none;
+  /* Let the browser handle all touch scrolling (any swipe direction);
+     taps still drive the touch reveal effect */
+  touch-action: manipulation;
 }
 
 /* Layer 1 & 2: Portrait Container — full-bleed, fills the section exactly */
