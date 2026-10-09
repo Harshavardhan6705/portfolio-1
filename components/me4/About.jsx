@@ -20,12 +20,7 @@ export default function About() {
             <span>01 // PROFILE & BACKGROUND</span>
           </Rise>
           <Rise as="h2" className="section-title">
-            Building my <span className="accent">foundation</span>
-            <br />
-            in Cloud &amp; DevOps
-          </Rise>
-          <Rise as="p" className={`section-subtitle ${styles.subtitleJustified}`}>
-            B.Sc. Computer Technology graduate from Coimbatore, focused on building practical skills in AWS Cloud and DevOps. Currently developing hands-on knowledge in cloud infrastructure, deployment automation, containers, CI/CD, Linux, and infrastructure tools.
+            BUILDING MY <span className="accent">FOUNDATION</span> IN CLOUD & DEVOPS
           </Rise>
         </div>
 
@@ -34,10 +29,10 @@ export default function About() {
           
           {/* Main Story Card — the whole box rises as one element */}
           <Rise className="rise-stretch">
-          <div className={`${styles.mainBioCard} glass-card`}>
+          <div className={`${styles.mainBioCard} glass-card card-dark`}>
             <div className={styles.cardHeader}>
               <Globe size={20} className={styles.iconAccent} />
-              <Rise as="h3" className={styles.cardTitle}>Learning Philosophy</Rise>
+              <Rise as="h3" className={styles.cardTitle}>LEARNING PHILOSOPHY</Rise>
             </div>
             
             <div className={styles.paragraphs}>
@@ -61,11 +56,11 @@ export default function About() {
 
           {/* Location & Origin Card — the whole box rises as one element */}
           <Rise className="rise-stretch">
-          <div className={`${styles.locationCard} glass-card`}>
+          <div className={`${styles.locationCard} glass-card card-dark`}>
             <div className={styles.locationHeader}>
               <MapPin size={24} className={styles.iconAccent} />
               <div>
-                <Rise as="h4" className={styles.locationTitle}>Coimbatore, India</Rise>
+                <Rise as="h4" className={styles.locationTitle}>COIMBATORE, INDIA</Rise>
                 <Rise as="p" className={styles.locationSub}>Tamil Nadu</Rise>
               </div>
             </div>
@@ -81,10 +76,10 @@ export default function About() {
 
             <Rise
               as="a"
-              href="/images/Harshavardhan-Resume.pdf"
+              href="/Harshavardhan_J_Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary"
+              className="btn-secondary"
               style={{ width: '100%', marginTop: '1rem' }}
             >
               <FileText size={16} />

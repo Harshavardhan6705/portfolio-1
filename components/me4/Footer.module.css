@@ -1,6 +1,6 @@
 .footer {
   padding: 2.2rem 0;
-  background: #050f10;
+  background: var(--ink);
   border-top: 1px solid var(--border-color);
   position: relative;
   z-index: 5;
@@ -12,7 +12,7 @@
   justify-content: space-between;
   gap: 1.5rem;
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: 0.78rem;
   color: var(--secondary);
 }
 
@@ -33,7 +33,7 @@
 .socialRow {
   display: flex;
   align-items: center;
-  gap: 2rem; /* wider spacing between the two targets (audit #21) */
+  gap: 1.4rem;
 }
 
 .socialLink {
@@ -44,13 +44,9 @@
   transition: all var(--transition-fast);
   letter-spacing: 0.08em;
   font-weight: 600;
-  /* 44px minimum touch target (audit #21) — padding grows the hit area
-     without changing the visual size of the label. */
-  min-height: 44px;
-  padding: 0 0.5rem;
 }
 
 .socialLink:hover {
   color: var(--primary);
-  text-shadow: 0 0 10px rgba(215, 255, 0, 0.4);
+  text-shadow: 0 0 10px rgba(var(--primary-rgb), 0.4);
 }

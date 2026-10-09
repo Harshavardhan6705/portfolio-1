@@ -228,8 +228,12 @@ function stopListeningIfIdle() {
  *
  * Returns an unregister function.
  */
+// Scroll pop motion is switched off site-wide: nothing registers, so no
+// element is ever translated while scrolling.
+const POP_MOTION_ENABLED = false;
+
 export function registerPop(reg) {
-  if (!reg || !reg.el) return () => {};
+  if (!POP_MOTION_ENABLED || !reg || !reg.el) return () => {};
   ensureQueries();
   if (reducedQuery && reducedQuery.matches) return () => {};
 

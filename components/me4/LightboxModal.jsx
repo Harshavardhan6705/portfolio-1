@@ -49,21 +49,30 @@ export default function LightboxModal({ isOpen, onClose, item }) {
           <X size={22} />
         </button>
 
-        {/* Main Image Frame */}
-        <div className={styles.imageFrame}>
-          <img 
-            src={item.src} 
-            alt={item.title} 
-            className={styles.modalImg} 
-          />
-        </div>
-
         {/* Metadata Footer */}
         <div className={styles.modalInfo}>
           <div className={styles.infoText}>
             <h3 className={styles.modalTitle}>{item.title}</h3>
             {item.caption && <p className={styles.modalCaption}>{item.caption}</p>}
           </div>
+
+          {item.highlights && (
+            <div>
+              <h4 className={styles.sectionHeading}>KEY FEATURES</h4>
+              <ul className={styles.highlightList}>
+                {item.highlights.map((h, idx) => (
+                  <li key={idx}>{h}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {item.techStack && (
+            <div>
+              <h4 className={styles.sectionHeading}>TECH STACK</h4>
+              <p className={styles.techStack}>{item.techStack.join(' · ')}</p>
+            </div>
+          )}
 
           {item.tags && (
             <div className={styles.tagsRow}>

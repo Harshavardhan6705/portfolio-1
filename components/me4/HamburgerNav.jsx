@@ -61,7 +61,7 @@ export default function HamburgerNav({ isOpen, onClose, activeSection, setActive
   // Every item targets a section id on THIS page. Selecting an item
   // closes the menu, then smooth-scrolls in place — nothing else.
   const navItems = [
-    { id: 'overview', label: '01 // OVERVIEW & HERO', targetSection: 'overview', icon: Sparkles },
+    { id: 'overview', label: '01 // OVERVIEW & HERO', targetSection: 'about', icon: Sparkles },
     { id: 'skills', label: '02 // SKILLS & CERTIFICATIONS', targetSection: 'skills', icon: Cpu },
     { id: 'projects', label: '03 // PROJECTS & CASE STUDIES', targetSection: 'projects', icon: FolderGit2 },
     { id: 'timeline', label: '04 // EVOLUTION & TIMELINE', targetSection: 'timeline', icon: Award },
@@ -98,7 +98,8 @@ export default function HamburgerNav({ isOpen, onClose, activeSection, setActive
             <ul className={styles.navList}>
               {navItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = activeSection === item.id;
+                // Item 01 never takes the solid active style — only the normal hover
+                const isActive = item.id !== 'overview' && activeSection === item.id;
                 return (
                   <li key={item.id} className={styles.navItem}>
                     <button

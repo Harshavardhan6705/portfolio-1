@@ -27,7 +27,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className={styles.footer} role="contentinfo">
+    <footer className={`${styles.footer} theme-dark`} role="contentinfo">
       <div className="container">
         <div className={styles.footerRow}>
           

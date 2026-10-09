@@ -16,8 +16,8 @@
   width: 120%;
   height: 120%;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(var(--fg-rgb), 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--fg-rgb), 0.05) 1px, transparent 1px);
   background-size: 60px 60px;
   will-change: transform;
 }
@@ -35,7 +35,7 @@
   right: -100px;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--sand) 0%, transparent 70%);
 }
 
 .glowOrb2 {
@@ -43,7 +43,7 @@
   left: -200px;
   width: 700px;
   height: 700px;
-  background: radial-gradient(circle, rgba(215, 255, 0, 0.7) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(210, 188, 145, 0.7) 0%, transparent 70%);
 }
 
 .scanlineOverlay {
@@ -54,10 +54,10 @@
   height: 100%;
   background: linear-gradient(
     to bottom,
-    rgba(255,255,255,0),
-    rgba(255,255,255,0) 50%,
-    rgba(0, 0, 0, 0.15) 50%,
-    rgba(0, 0, 0, 0.15)
+    rgba(var(--fg-rgb), 0),
+    rgba(var(--fg-rgb), 0) 50%,
+    rgba(51, 43, 28, 0.052) 50%,
+    rgba(51, 43, 28, 0.052)
   );
   background-size: 100% 4px;
   opacity: 0.4;
@@ -68,8 +68,8 @@
   bottom: 40px;
   left: 40px;
   font-family: var(--font-mono);
-  font-size: 0.75rem; /* was 0.7rem (11px) — bumped to the 12px floor */
-  color: rgba(255, 255, 255, 0.08);
+  font-size: 0.7rem;
+  color: rgba(var(--fg-rgb), 0.08);
   display: flex;
   flex-direction: column;
   gap: 4px;

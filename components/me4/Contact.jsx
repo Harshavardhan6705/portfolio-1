@@ -20,10 +20,16 @@ const LinkedinIcon = ({ size = 16 }) => (
   </svg>
 );
 
+// Web3Forms access key (https://web3forms.com) — submissions are emailed to
+// the address the key was created for. Set NEXT_PUBLIC_WEB3FORMS_KEY in
+// .env.local (local) and in Vercel → Project → Settings → Environment Variables.
+const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
+
 /**
  * Contact Component
- * Client-side validated form (opens the visitor's email client), direct email
- * copy button, and real GitHub / LinkedIn profile links.
+ * Client-side validated form (delivered by email via Web3Forms; falls back to
+ * the visitor's email client if no key is configured), direct email copy
+ * button, and real GitHub / LinkedIn profile links.
  */
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -35,6 +41,8 @@ export default function Contact() {
 
   const [errors, setErrors] = useState({});
   const [copiedEmail, setCopiedEmail] = useState(false);
+  // 'idle' | 'sending' | 'sent' | 'error'
+  const [status, setStatus] = useState('idle');
 
   const validate = () => {
     const errs = {};
@@ -62,14 +70,40 @@ export default function Contact() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
-    // No backend — compose the message in the visitor's own email client.
-    const subject = encodeURIComponent(`${formData.subject} — from ${formData.name}`);
-    const body = encodeURIComponent(`${formData.message}\n\n— ${formData.name} (${formData.email})`);
-    window.location.href = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`;
+    if (!WEB3FORMS_KEY) {
+      // No key configured — compose the message in the visitor's own email client.
+      const subject = encodeURIComponent(`${formData.subject} — from ${formData.name}`);
+      const body = encodeURIComponent(`${formData.message}\n\n— ${formData.name} (${formData.email})`);
+      window.location.href = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`;
+      return;
+    }
+
+    setStatus('sending');
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `Portfolio message: ${formData.subject}`,
+          from_name: 'harsha.buzz portfolio',
+          name: formData.name,
+          email: formData.email, // lets you hit "Reply" in Gmail to answer the sender
+          message: formData.message,
+          botcheck: e.target.botcheck?.checked || false, // spam honeypot
+        }),
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message);
+      setStatus('sent');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch {
+      setStatus('error');
+    }
   };
 
   const handleCopyEmail = () => {
@@ -91,12 +125,7 @@ export default function Contact() {
           </Pop>
           <Pop strength={11}>
             <Rise as="h2" className="section-title">
-              Get in <span className="accent">touch &amp; connect</span>
-            </Rise>
-          </Pop>
-          <Pop strength={7}>
-            <Rise as="p" className="section-subtitle">
-              I'm a fresher focused on AWS Cloud and DevOps, and I'm open to entry-level opportunities, internships, projects, and professional connections.
+              GET IN <span className="accent">TOUCH & CONNECT</span>
             </Rise>
           </Pop>
         </div>
@@ -107,7 +136,7 @@ export default function Contact() {
           {/* Left Column: Direct Connect & Info */}
           <div className={styles.infoCol}>
             <Rise>
-            <div className={`${styles.infoCard} glass-card`}>
+            <div className={`${styles.infoCard} glass-card card-dark`}>
               <Pop strength={9} className="pop-inner">
                 <Rise as="h3" className={styles.infoTitle}>
                   <Mail className={styles.iconAccent} size={20} />
@@ -167,7 +196,7 @@ export default function Contact() {
 
           {/* Right Column: Contact Form — the whole box rises as one element */}
           <Rise className="rise-stretch">
-          <div className={`${styles.formCard} glass-card`}>
+          <div className={`${styles.formCard} glass-card card-dark`}>
             <Pop strength={9} className="pop-inner">
               <h3 className={styles.formTitle}>
                 <MessageSquare className={styles.iconAccent} size={20} />
@@ -176,6 +205,20 @@ export default function Contact() {
             </Pop>
 
             <form onSubmit={handleSubmit} noValidate className={styles.contactForm}>
+              {/* Spam honeypot — hidden from people, bots tick it */}
+              <input type="checkbox" name="botcheck" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+
+              {status === 'sent' && (
+                <div className={styles.successBanner} role="status">
+                  <Check size={18} />
+                  <span>Message sent — thanks! I&apos;ll get back to you soon.</span>
+                </div>
+              )}
+              {status === 'error' && (
+                <span className={styles.errorText} role="alert">
+                  <AlertCircle size={12} /> Couldn&apos;t send right now. Please email me directly at {personalInfo.email}.
+                </span>
+              )}
               <div className={styles.formRow}>
                 <div className={styles.fieldGroup}>
                   <Pop strength={5} className="pop-inner">
@@ -244,7 +287,7 @@ export default function Contact() {
                     value={formData.subject}
                     onChange={handleChange}
                     className={`${styles.input} ${errors.subject ? styles.inputError : ''}`}
-                    placeholder="e.g. Entry-level opportunity / Internship"
+                    placeholder="e.g. Cloud Engineer opportunity / Project inquiry"
                     aria-invalid={!!errors.subject}
                     aria-describedby={errors.subject ? 'subject-error' : undefined}
                   />
@@ -288,9 +331,10 @@ export default function Contact() {
                   type="submit"
                   className="btn-primary"
                   style={{ width: '100%', marginTop: '0.5rem' }}
+                  disabled={status === 'sending'}
                 >
                   <Send size={18} />
-                  <span>SEND MESSAGE</span>
+                  <span>{status === 'sending' ? 'SENDING…' : 'SEND MESSAGE'}</span>
                 </Rise>
               </Pop>
             </form>

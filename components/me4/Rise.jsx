@@ -41,6 +41,9 @@ let syncTimer = 0;
 let lastKnownScrollY = -1;
 
 const BAND_BOTTOM_OFFSET = 40; // px above the bottom edge where the rise begins
+// Fraction of the viewport at the top where content blurs back out as it
+// scrolls up under the header (the hero is exempt so it never starts blurred)
+const BAND_TOP_RATIO = 0.18;
 
 function checkAll() {
   if (registrations.size === 0) return;
@@ -52,7 +55,8 @@ function checkAll() {
     const el = item.el;
     if (!el || !el.isConnected) return;
     const rect = el.getBoundingClientRect();
-    const inView = rect.top < vh - BAND_BOTTOM_OFFSET && rect.bottom > 0;
+    const topLimit = item.inHero ? 0 : vh * BAND_TOP_RATIO;
+    const inView = rect.top < vh - BAND_BOTTOM_OFFSET && rect.bottom > topLimit;
     if (inView !== item.visible) updates.push({ item, inView });
   });
 
@@ -116,6 +120,7 @@ export function useRise() {
       el: node,
       set: setMounted,
       visible: false,
+      inHero: !!node.closest('#overview'),
     };
     registrations.add(item);
     ensureListening();

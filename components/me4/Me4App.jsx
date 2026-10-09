@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import HamburgerNav from './HamburgerNav';
 import ParallaxBackground from './ParallaxBackground';
@@ -37,6 +37,101 @@ export default function Me4App({ fixedOverlaysVisible = true, showHero = true })
   const handleCloseLightbox = () => {
     setLightboxState({ isOpen: false, item: null });
   };
+
+  // Scroll entrance (modelled on the reference site): each section header
+  // and each card starts blurred and transparent, then settles into focus
+  // when the user reaches it, while heading letters flip up one by one.
+  // Each block resets when it leaves the viewport, so it replays every
+  // time the user comes back. The pending classes are added from JS, so
+  // nothing stays hidden without JavaScript.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Split every section heading into per-letter spans. Words are kept in
+    // nowrap wrappers so line-breaking stays exactly as before.
+    document.querySelectorAll('.hv-page section.section .section-title').forEach((title) => {
+      if (title.dataset.split) return;
+      title.dataset.split = 'true';
+      title.setAttribute('aria-label', title.textContent.trim());
+      let index = 0;
+      const walker = document.createTreeWalker(title, NodeFilter.SHOW_TEXT);
+      const textNodes = [];
+      while (walker.nextNode()) textNodes.push(walker.currentNode);
+      textNodes.forEach((node) => {
+        const frag = document.createDocumentFragment();
+        node.textContent.split(/(\s+)/).forEach((part) => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) {
+            frag.appendChild(document.createTextNode(part));
+            return;
+          }
+          const word = document.createElement('span');
+          word.className = 'split-word';
+          word.setAttribute('aria-hidden', 'true');
+          [...part].forEach((ch) => {
+            const char = document.createElement('span');
+            char.className = 'split-char';
+            char.style.setProperty('--ci', index++);
+            char.textContent = ch;
+            word.appendChild(char);
+          });
+          frag.appendChild(word);
+        });
+        node.replaceWith(frag);
+      });
+    });
+
+    // Reveal each block on its OWN visibility — every section header and
+    // every card comes into focus only when the user actually reaches it.
+    const blocks = [
+      ...document.querySelectorAll(
+        '.hv-page section.section .section-header, .hv-page section.section .glass-card'
+      ),
+    ];
+    // Text inside each card that isn't already a Rise element (skill tags,
+    // checklist lines, contact details…) also reveals on its own visibility.
+    document.querySelectorAll('.hv-page section.section .glass-card').forEach((card) => {
+      card.querySelectorAll('*').forEach((el) => {
+        if (el.closest('svg') || el.closest('form')) return;
+        const hasText = [...el.childNodes].some(
+          (n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim()
+        );
+        if (!hasText) return;
+        const rise = el.closest('.rise');
+        if (rise && card.contains(rise) && rise !== card) return; // Rise handles it
+        blocks.push(el);
+      });
+    });
+    blocks.forEach((b) => b.classList.add('blur-reveal'));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle('blur-revealed', entry.isIntersecting);
+        });
+      },
+      { rootMargin: '-18% 0px -12% 0px', threshold: 0 } // top band: blur out under the header
+    );
+    blocks.forEach((b) => observer.observe(b));
+
+    // Headings animate on their OWN visibility, so a heading lower down a
+    // tall section (e.g. "Education & Certifications" inside Skills) still
+    // plays when the user reaches it — and replays on every return.
+    const titles = document.querySelectorAll('.hv-page section.section .section-title');
+    const titleObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle('title-in', entry.isIntersecting);
+        });
+      },
+      { rootMargin: '-18% 0px -10% 0px', threshold: 0 }
+    );
+    titles.forEach((t) => titleObserver.observe(t));
+
+    return () => {
+      observer.disconnect();
+      titleObserver.disconnect();
+    };
+  }, []);
 
   /**
    * Section navigation happens inside HamburgerNav / Header / Hero via

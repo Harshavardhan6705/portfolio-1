@@ -30,12 +30,7 @@ export default function Skills() {
           </Pop>
           <Pop strength={11}>
             <Rise as="h2" className="section-title">
-              Cloud &amp; <span className="accent">DevOps toolkit</span>
-            </Rise>
-          </Pop>
-          <Pop strength={7}>
-            <Rise as="p" className="section-subtitle">
-              A practical toolkit covering AWS services, DevOps tooling, containers, networking, security, and programming fundamentals.
+              CLOUD & <span className="accent">DEVOPS TOOLKIT</span>
             </Rise>
           </Pop>
         </div>
@@ -47,7 +42,7 @@ export default function Skills() {
             return (
               <Pop key={idx} strength={5} className="pop-stretch">
                 <Rise className="rise-stretch">
-                <div className={`${styles.categoryCard} glass-card`}>
+                <div className={`${styles.categoryCard} glass-card card-dark`}>
                   <div className={styles.catHeader}>
                     <div className={styles.iconWrap}>
                       <CatIcon size={22} />
@@ -77,10 +72,7 @@ export default function Skills() {
         <div className={styles.certSection}>
           <div className="section-header">
             <Rise as="h2" className="section-title">
-              Education &amp; <span className="accent">certifications</span>
-            </Rise>
-            <Rise as="p" className="section-subtitle">
-              Coursework specializations and cloud certification training.
+              EDUCATION & <span className="accent">CERTIFICATIONS</span>
             </Rise>
           </div>
 

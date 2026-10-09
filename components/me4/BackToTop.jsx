@@ -36,7 +36,7 @@ export default function BackToTop() {
 
   return (
     <button
-      className={styles.backToTopBtn}
+      className={`${styles.backToTopBtn} theme-dark`}
       onClick={scrollToTop}
       aria-label="Back to top of page"
       title="Back to Top"

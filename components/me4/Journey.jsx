@@ -23,12 +23,7 @@ export default function Journey() {
           </Pop>
           <Pop strength={11}>
             <Rise as="h2" className="section-title">
-              Education <span className="accent">&amp; timeline</span>
-            </Rise>
-          </Pop>
-          <Pop strength={7}>
-            <Rise as="p" className="section-subtitle">
-              Academic journey from higher secondary schooling to my B.Sc. degree.
+              EDUCATION <span className="accent">& TIMELINE</span>
             </Rise>
           </Pop>
         </div>
@@ -50,7 +45,7 @@ export default function Journey() {
 
                 {/* Content Card — year/title/description drift at their
                     own speeds inside the independently-moving entry. */}
-                <div className={`${styles.timelineCard} glass-card`}>
+                <div className={`${styles.timelineCard} glass-card card-dark`}>
                   <Pop strength={8} className="pop-inner">
                     <Rise as="span" className={styles.yearTag}>{item.year}</Rise>
                   </Pop>

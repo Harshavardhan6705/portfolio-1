@@ -23,7 +23,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(7, 17, 18, 0.95);
+  background: rgba(240, 229, 197, 0.95);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 }
@@ -37,7 +37,7 @@
   border: 1px solid var(--border-accent);
   border-radius: var(--radius-lg);
   padding: 2.5rem;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), var(--glow-accent);
+  box-shadow: 0 0 50px rgba(51, 43, 28, 0.315), var(--glow-accent);
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -115,7 +115,7 @@
   align-items: center;
   gap: 1.2rem;
   padding: 1rem 1.4rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--fg-rgb), 0.03);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   color: var(--text);
@@ -128,7 +128,7 @@
 }
 
 .navBtn:hover {
-  background: rgba(215, 255, 0, 0.1);
+  background: var(--highlight-bg);
   border-color: var(--primary);
   color: var(--primary);
   transform: translateX(8px);
@@ -137,13 +137,13 @@
 
 .activeNavBtn {
   background: var(--primary) !important;
-  color: #000000 !important;
+  color: var(--on-primary) !important;
   border-color: var(--primary) !important;
 }
 
 .activeNavBtn .navIcon,
 .activeNavBtn .arrowIcon {
-  color: #000000 !important;
+  color: var(--on-primary) !important;
 }
 
 .navIcon {
@@ -173,7 +173,7 @@
 }
 
 .infoCard {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--fg-rgb), 0.02);
   border: 1px solid var(--border-color);
   padding: 1.25rem;
   border-radius: var(--radius-md);
@@ -211,7 +211,7 @@
 }
 
 .socialCard {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--fg-rgb), 0.02);
   border: 1px solid var(--border-color);
   padding: 1.25rem;
   border-radius: var(--radius-md);
@@ -228,7 +228,7 @@
   align-items: center;
   gap: 0.6rem;
   padding: 0.6rem 0.9rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(var(--fg-rgb), 0.04);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   color: var(--text);
@@ -240,7 +240,7 @@
 .socialBtn:hover {
   border-color: var(--primary);
   color: var(--primary);
-  background: rgba(215, 255, 0, 0.08);
+  background: var(--highlight-bg);
 }
 
 .hudFooter {

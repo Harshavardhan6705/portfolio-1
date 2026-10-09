@@ -2,11 +2,12 @@
    HARSHAVARDHAN J — PORTFOLIO DESIGN SYSTEM & GLOBAL STYLES
    Design: Dark & Modern (Cyber Minimalist / Techy & Innovative)
    Colors:
-     Primary: #d7ff00 (Electric Cyber Lime)
-     Accent: #d7ff00
-     Background: #071112 (Deep Obsidian Black)
-     Text: #f5f5f5 (Bright Off-White)
-     Secondary: #777777 (Neutral Slate)
+     Warm Cream  #F0E5C5  page background
+     Sand        #D2BC91  secondary backgrounds
+     Dark Brown  #332B1C  headings & important text
+     Pale Green  #E2F4CB  accent / highlight / active
+     Off-White   #F8F5EA  cards & containers
+     Dark Green  #1F3A2B  nav, borders, icons, buttons
    Typography:
      Display Headings: 'Syne', sans-serif
      Technical / Metadata: 'JetBrains Mono', monospace
@@ -14,24 +15,37 @@
    ========================================================================== */
 
 .hv-page {
-  /* Color Palette */
-  --primary: #d7ff00;
-  --primary-rgb: 215, 255, 0;
-  --accent: #d7ff00;
-  --bg: #071112;
-  --bg-rgb: 10, 10, 10;
-  --bg-card: rgba(17, 29, 31, 0.75);
-  --bg-card-hover: rgba(23, 35, 37, 0.9);
-  --bg-subtle: #0b181a;
-  --bg-elevated: #0e1f21;
-  --text: #f5f5f5;
-  --text-muted: #888888;
-  --secondary: #777777;
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-accent: rgba(215, 255, 0, 0.25);
-  --border-accent-strong: rgba(215, 255, 0, 0.55);
-  --glow-accent: 0 0 25px rgba(215, 255, 0, 0.2);
-  --glow-accent-strong: 0 0 40px rgba(215, 255, 0, 0.35);
+  /* Color Palette — light surfaces (default) */
+  --cream: #F0E5C5;
+  --sand: #D2BC91;
+  --brown: #332B1C;
+  --pale-green: #E2F4CB;
+  --off-white: #F8F5EA;
+  --ink: #1F3A2B;
+
+  --primary: var(--ink);            /* icons, borders, buttons, high-contrast */
+  --primary-rgb: 31, 58, 43;
+  --on-primary: var(--pale-green);  /* accent text on --primary fills */
+  --primary-hover: var(--brown);
+  --accent: var(--pale-green);
+  --highlight-bg: var(--pale-green);
+  --accent-heading: #3E8E4F;        /* accent words in headings */
+  --bg: var(--cream);
+  --bg-rgb: 240, 229, 197;
+  --bg-card: var(--off-white);
+  --bg-card-hover: var(--off-white);
+  --bg-subtle: var(--sand);
+  --bg-elevated: var(--off-white);
+  --text: var(--brown);
+  --text-body: rgba(51, 43, 28, 0.85);
+  --text-muted: rgba(51, 43, 28, 0.68);
+  --secondary: rgba(51, 43, 28, 0.55);
+  --fg-rgb: 31, 58, 43;
+  --border-color: rgba(31, 58, 43, 0.12);
+  --border-accent: rgba(31, 58, 43, 0.28);
+  --border-accent-strong: rgba(31, 58, 43, 0.5);
+  --glow-accent: 0 8px 24px rgba(51, 43, 28, 0.14);
+  --glow-accent-strong: 0 12px 36px rgba(51, 43, 28, 0.2);
 
   /* Typography */
   --font-display: 'Syne', sans-serif;
@@ -52,22 +66,33 @@
   --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-normal: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-smooth: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* TYPE SCALE (usability audit #1): one shared ladder instead of
-     ad-hoc sizes. All mono micro-text and body copy MUST use one of
-     these — no more one-off 0.7/0.72/0.74/0.78/0.8/0.85/0.88 values.
-       xs    12px  micro labels, badges, chips
-       sm    13px  small labels, meta rows
-       md    14px  emphasised small text, greetings
-       base  15px  body copy, inputs, descriptions
-       lg    17px  large body / subtitles */
-  --text-xs: 0.75rem;
-  --text-sm: 0.8125rem;
-  --text-md: 0.875rem;
-  --text-base: 0.9375rem;
-  --text-lg: 1.0625rem;
-  --text-xl: 1.25rem;
 }
+
+/* Dark surfaces (hero over the portrait, nav bar, footer, image overlays):
+   same palette, inverted roles so text stays readable on Near Black. */
+:where(.hv-page) .theme-dark,
+:where(.hv-page) .card-dark,
+:where(.hv-page) .glass-card:not(.card-dark):hover {
+  --primary: var(--pale-green);
+  --primary-rgb: 226, 244, 203;
+  --on-primary: var(--ink);
+  --primary-hover: var(--off-white);
+  --highlight-bg: rgba(226, 244, 203, 0.12);
+  --accent-heading: var(--pale-green);
+  --bg-card: rgba(31, 58, 43, 0.78);
+  --bg-card-hover: rgba(31, 58, 43, 0.88);
+  --text: var(--off-white);
+  --text-body: rgba(248, 245, 234, 0.85);
+  --text-muted: rgba(248, 245, 234, 0.65);
+  --secondary: rgba(248, 245, 234, 0.5);
+  --fg-rgb: 248, 245, 234;
+  --border-color: rgba(248, 245, 234, 0.12);
+  --border-accent: rgba(226, 244, 203, 0.3);
+  --border-accent-strong: rgba(226, 244, 203, 0.55);
+  --glow-accent: 0 0 25px rgba(226, 244, 203, 0.2);
+  --glow-accent-strong: 0 0 40px rgba(226, 244, 203, 0.3);
+}
+
 
 
 
@@ -85,7 +110,7 @@
   scroll-behavior: smooth;
   background-color: var(--bg);
   color: var(--text);
-  color-scheme: dark;
+  color-scheme: light;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -101,14 +126,14 @@
   position: relative;
   min-height: 100vh;
   selection-background-color: var(--primary);
-  selection-color: #000;
+  selection-color: var(--on-primary);
 }
 
 
 
 :where(.hv-page) ::selection, :where(.hv-page) *::selection {
   background: var(--primary);
-  color: #000000;
+  color: var(--on-primary);
 }
 
 
@@ -125,7 +150,7 @@
 
 
 :where(.hv-page) p {
-  color: #d1d1d1;
+  color: var(--text-body);
   font-size: 1.05rem;
   line-height: 1.7;
 }
@@ -205,56 +230,35 @@
   align-items: center;
   gap: 0.6rem;
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
   color: var(--primary);
   margin-bottom: 0.85rem;
-  background: rgba(215, 255, 0, 0.08);
+  background: var(--highlight-bg);
   padding: 0.3rem 0.8rem;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(215, 255, 0, 0.2);
+  border: 1px solid rgba(var(--primary-rgb), 0.2);
 }
 
 
 
 :where(.hv-page) .section-title {
-  /* Desktop: capped at 55px — the measured maximum at which the Profile
-     heading's first line fits the 1232px container, keeping the explicit
-     two-line break intact. Sentence case + 1.2 line-height per usability
-     audit (long all-caps runs are hard to read; tight leading cramped
-     two-line headings). */
-  font-size: clamp(2.75rem, 3.82vw, 3.4375rem);
+  font-size: clamp(1.2rem, 2.1vw, 1.9rem);
   font-weight: 800;
+  text-transform: uppercase;
   letter-spacing: -0.03em;
-  line-height: 1.2;
+  line-height: 1.08;
   margin-bottom: 1rem;
-}
-
-/* Tablet: sized so the Profile heading's first line still fits on one
-   line down to 768px (max ≈ 41px at 1024px, ≈ 31px at 768px). */
-@media (max-width: 1024px) {
-  :where(.hv-page) .section-title {
-    font-size: clamp(2rem, 4vw, 2.75rem);
-  }
-}
-
-/* Mobile: targets 34-42px, floored at 28px on the narrowest phones —
-   the longest line of the Profile heading needs ≈11.1px of width per
-   px of font size and the 390px container is ≈325px wide, capping the
-   size at ≈29px. The two-line break is kept; longer lines wrap
-   naturally on narrow screens. */
-@media (max-width: 640px) {
-  :where(.hv-page) .section-title {
-    font-size: clamp(1.75rem, 7.4vw, 2.625rem);
-  }
 }
 
 
 
 :where(.hv-page) .section-title span.accent {
-  color: var(--primary);
-  text-shadow: 0 0 20px rgba(215, 255, 0, 0.3);
+  color: var(--accent-heading);
+  background: var(--highlight-bg); /* pale-green highlighter behind accent words */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 
@@ -262,19 +266,17 @@
 :where(.hv-page) .section-subtitle {
   max-width: 680px;
   color: var(--text-muted);
-  font-size: var(--text-lg);
+  font-size: 1.1rem;
   font-family: var(--font-body);
 }
 
 
 
-/* Card Grid Layouts — align-items:start lets each card size to its own
-   content instead of stretching short cards into whitespace. */
+/* Card Grid Layouts */
 :where(.hv-page) .grid-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 2rem;
-  align-items: start;
 }
 
 
@@ -306,11 +308,22 @@
 
 
 
-:where(.hv-page) .glass-card:hover {
+/* Certificate & project cards: cream, flipping to Dark Green on hover
+   (text switches via the .theme-dark tokens above) */
+:where(.hv-page) .glass-card:not(.card-dark):hover {
   transform: translateY(-5px);
-  border-color: var(--border-accent);
-  background: var(--bg-card-hover);
-  box-shadow: var(--glow-accent);
+  background: var(--ink);
+  border-color: var(--ink);
+  box-shadow: 0 12px 30px rgba(31, 58, 43, 0.28);
+}
+
+/* About, skill, timeline and contact cards: always Dark Green,
+   unchanged on hover */
+:where(.hv-page) .card-dark,
+:where(.hv-page) .card-dark:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  box-shadow: 0 12px 30px rgba(31, 58, 43, 0.28);
 }
 
 
@@ -322,10 +335,10 @@
   justify-content: center;
   gap: 0.6rem;
   background: var(--primary);
-  color: #000000;
+  color: var(--on-primary);
   font-family: var(--font-mono);
   font-weight: 700;
-  font-size: var(--text-base);
+  font-size: 0.92rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 0.9rem 1.8rem;
@@ -339,9 +352,13 @@
 
 :where(.hv-page) .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 25px rgba(215, 255, 0, 0.45);
-  background: #e4ff33;
-}:where(.hv-page) .btn-secondary {
+  box-shadow: 0 0 25px rgba(var(--primary-rgb), 0.45);
+  background: var(--primary-hover);
+}
+
+
+
+:where(.hv-page) .btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -350,15 +367,12 @@
   color: var(--text);
   font-family: var(--font-mono);
   font-weight: 600;
-
-
-
-  font-size: var(--text-base);
+  font-size: 0.92rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 0.9rem 1.8rem;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(var(--fg-rgb), 0.2);
   transition: all var(--transition-fast);
   text-decoration: none;
 }
@@ -368,7 +382,7 @@
 :where(.hv-page) .btn-secondary:hover {
   border-color: var(--primary);
   color: var(--primary);
-  background: rgba(215, 255, 0, 0.05);
+  background: var(--highlight-bg);
   transform: translateY(-2px);
 }
 
@@ -381,10 +395,10 @@
   padding: 0.35rem 0.75rem;
   border-radius: var(--radius-pill);
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  background: rgba(255, 255, 255, 0.05);
-  color: #e0e0e0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.75rem;
+  background: rgba(var(--fg-rgb), 0.05);
+  color: var(--text-body);
+  border: 1px solid rgba(var(--fg-rgb), 0.1);
   letter-spacing: 0.04em;
   transition: all var(--transition-fast);
 }
@@ -394,15 +408,15 @@
 :where(.hv-page) .badge:hover {
   border-color: var(--primary);
   color: var(--primary);
-  background: rgba(215, 255, 0, 0.08);
+  background: var(--highlight-bg);
 }
 
 
 
 :where(.hv-page) .badge-accent {
-  background: rgba(215, 255, 0, 0.1);
+  background: var(--highlight-bg);
   color: var(--primary);
-  border-color: rgba(215, 255, 0, 0.3);
+  border-color: rgba(var(--primary-rgb), 0.3);
 }
 
 
@@ -415,15 +429,15 @@
 
 
 :where(.hv-page) ::-webkit-scrollbar-track {
-  background: #071112;
+  background: var(--bg);
 }
 
 
 
 :where(.hv-page) ::-webkit-scrollbar-thumb {
-  background: #1e3335;
+  background: var(--sand);
   border-radius: 4px;
-  border: 2px solid #071112;
+  border: 2px solid var(--bg);
 }
 
 
@@ -474,31 +488,23 @@
    The entrance is a one-shot KEYFRAME, so hover/press transforms on
    buttons and cards keep working untouched afterwards.
    ============================================================ */
+/* Entrance: blur + fade into focus each time the element is reached (no
+   upward movement). The transform transition keeps hover lifts smooth. */
 .rise {
   --rise-y: 35px;
 
   opacity: 0;
-  /* The transform transition keeps card/button hover transforms smooth
-     after the entrance keyframe finishes. */
-  transition: opacity 0.25s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+  filter: blur(8px);
+  transition: opacity 1.3s ease-out,
+              filter 1.3s ease-out,
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .rise-visible {
   opacity: 1;
-  animation: riseEnter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: blur(0);
 }
 
-@keyframes riseEnter {
-  from {
-    opacity: 0;
-    transform: translateY(var(--rise-y));
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 /* Carrier variants — keep layout neutral, same conventions as the
    pop-* carriers: .rise-flex for inline elements (transform does not
@@ -530,6 +536,7 @@
 @media (prefers-reduced-motion: reduce) {
   .rise {
     opacity: 1;
+    filter: none;
     transition: none;
     will-change: auto;
   }
@@ -593,3 +600,74 @@
 }
 
 
+
+
+/* ============================================================
+   SCROLL ENTRANCE — each section header / card comes into focus
+   when reached, heading letters flip up. Classes are toggled per block
+   by Me4App's IntersectionObserver; leaving resets it, so it replays.
+   ============================================================ */
+:where(.hv-page) .blur-reveal {
+  filter: blur(10px);
+  opacity: 0;
+  transform: scale(1.04);
+  transition: filter 1.3s ease-out,
+              opacity 1.3s ease-out,
+              transform 1.3s ease-out;
+}
+
+:where(.hv-page) .blur-reveal.blur-revealed {
+  filter: blur(0);
+  opacity: 1;
+  transform: none;
+}
+
+/* Cards: blur + fade only (no zoom), and keep their own hover
+   transitions (lift / colour flip) working after the reveal */
+:where(.hv-page) .glass-card.blur-reveal {
+  transform: none;
+  transition: filter 1s ease-out,
+              opacity 1s ease-out,
+              transform var(--transition-normal),
+              border-color var(--transition-normal),
+              box-shadow var(--transition-normal),
+              background-color var(--transition-normal);
+}
+
+/* Per-letter heading animation (spans created by Me4App) */
+:where(.hv-page) .split-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+:where(.hv-page) .split-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(110%) rotateX(-70deg);
+  transform-origin: 50% 100%;
+  transition: transform 1s ease-out,
+              opacity 1s ease-out;
+}
+
+:where(.hv-page) .title-in .split-char {
+  opacity: 1;
+  transform: none;
+  /* letters follow one another, starting as the section comes into focus */
+  transition-delay: calc(0.3s + var(--ci) * 0.045s);
+}
+
+/* Text inside cards reveals a little faster (1s) than section headers */
+:where(.hv-page) .glass-card .rise {
+  transition-duration: 1s, 1s, 0.45s; /* opacity, filter, transform */
+}
+
+/* doubled class outranks component transition rules on card text;
+   colour/border keep their quick hover timing */
+:where(.hv-page) .glass-card .blur-reveal.blur-reveal {
+  transition: filter 1s ease-out,
+              opacity 1s ease-out,
+              transform 1s ease-out,
+              color 0.2s ease,
+              background-color 0.2s ease,
+              border-color 0.2s ease;
+}

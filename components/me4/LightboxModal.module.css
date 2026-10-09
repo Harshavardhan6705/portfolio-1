@@ -23,7 +23,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(4, 11, 12, 0.92);
+  background: rgba(51, 43, 28, 0.55);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
@@ -33,11 +33,11 @@
   z-index: 2;
   max-width: 1000px;
   width: 100%;
-  background: #0a1819;
+  background: var(--off-white);
   border: 1px solid var(--border-accent);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 0 60px rgba(0, 0, 0, 0.95), var(--glow-accent-strong);
+  box-shadow: 0 0 60px rgba(51, 43, 28, 0.332), var(--glow-accent-strong);
   display: flex;
   flex-direction: column;
   max-height: 90vh;
@@ -51,7 +51,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(7, 17, 18, 0.8);
+  background: var(--bg);
   border: 1px solid var(--border-accent);
   color: var(--text);
   display: flex;
@@ -62,14 +62,14 @@
 
 .closeBtn:hover {
   background: var(--primary);
-  color: #000000;
+  color: var(--on-primary);
   transform: rotate(90deg);
 }
 
 .imageFrame {
   width: 100%;
   max-height: 520px;
-  background: #050f10;
+  background: var(--sand);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -83,12 +83,48 @@
 }
 
 .modalInfo {
-  padding: 1.8rem;
-  background: #0c1c1d;
-  border-top: 1px solid var(--border-color);
+  padding: 1.8rem 4.5rem 1.8rem 1.8rem; /* right gap keeps text clear of the close button */
+  background: var(--off-white);
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  overflow-y: auto; /* longer project details scroll inside the 90vh modal */
+}
+
+.sectionHeading {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.highlightList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.highlightList li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.highlightList li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+}
+
+.techStack {
+  font-size: 0.88rem;
+  color: var(--text);
 }
 
 .modalTitle {

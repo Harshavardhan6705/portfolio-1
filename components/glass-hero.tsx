@@ -11,10 +11,8 @@ import scrollToSection from "./me4/scrollToSection";
 import Pop from "./me4/Pop";
 import Rise from "./me4/Rise";
 
-// Reveal circle radii — increased 35% from the original 235/150 (audit request:
-// 100% → 135%). Desktop ≈317px, mobile ≈203px.
-const DESKTOP_RADIUS = 317;
-const MOBILE_RADIUS = 203;
+const DESKTOP_RADIUS = 235;
+const MOBILE_RADIUS = 150;
 
 export default function GlassHero({
   onExplore,
@@ -222,9 +220,9 @@ export default function GlassHero({
 
   const statIcons = [GraduationCap, Cloud, Sparkles];
   const statValues = [
-    "B.Sc. Computer Technology",
-    "AWS Cloud & DevOps",
-    "Fresher",
+    "B.Sc. COMPUTER TECHNOLOGY",
+    "AWS CLOUD & DEVOPS",
+    "FRESHER",
   ];
   const statLabels = ["EDUCATION", "CAREER FOCUS", "ENTRY LEVEL"];
 
@@ -257,10 +255,11 @@ export default function GlassHero({
         <div className={styles.heroWrapper}>
           {/* Heading Section */}
           <div className={styles.titleContainer}>
-            <Rise as="p" className={styles.greetingText}>Hello world, I am</Rise>
+            <Rise as="p" className={styles.greetingText}>HELLO WORLD, I AM</Rise>
             <Pop strength={14}>
               <Rise as="h1" className={styles.mainTitle}>
-                HARSHAVARDHAN<br />
+                HARSHAVARDHAN
+                <br />
                 <span className={styles.titleInitial}>J</span>
               </Rise>
             </Pop>
@@ -271,7 +270,7 @@ export default function GlassHero({
 
           {/* Dynamic Role Typewriter Bar */}
           <Pop strength={7}>
-            <Rise as="div" className={styles.roleBar}>
+            <Rise as="div" className={`${styles.roleBar} theme-dark`}>
               <span className={styles.rolePrefix}>$ ACTIVE_ROLE:</span>
               <span className={styles.typingRole}>{displayText}</span>
               <span className={styles.cursorBlink}>|</span>

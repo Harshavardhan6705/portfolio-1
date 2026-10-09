@@ -1,5 +1,5 @@
 import React from 'react';
-import { Terminal, ZoomIn, ExternalLink } from 'lucide-react';
+import { Terminal, ZoomIn } from 'lucide-react';
 import { projectsData, personalInfo } from './data/portfolioData';
 import Rise, { useRise } from './Rise';
 import usePopMotion from './usePopMotion';
@@ -34,7 +34,7 @@ function Reveal({ as: Tag = 'div', className = '', children, ...rest }) {
 }
 
 /**
- * ActionButton — CODE / LIVE DEMO button, each with its own Rise
+ * ActionButton — project action button, each with its own Rise
  * trigger AND its own pop-motion instance (inside the rise element, so
  * the two transforms never overwrite each other).
  */
@@ -60,8 +60,8 @@ function ActionButton({ href, onClick, primary = false, icon, children }) {
 
 /**
  * A single project card. This component is fully self-contained: the
- * card and EVERY internal element (image, badge, title, tagline,
- * description, tags, buttons) each hold their own observer and state.
+ * card and EVERY internal element (image, badge, title, description,
+ * buttons) each hold their own observer and state.
  * Two rendered cards share NOTHING — Project 2 animates even if the
  * user jumps straight to it and Project 1 was never seen.
  */
@@ -85,8 +85,11 @@ function ProjectCard({ project, onOpenLightbox }) {
         onClick={() => onOpenLightbox({
           src: project.fullImage || project.image,
           title: project.title,
-          caption: project.description,
-          tags: project.tags
+          caption: project.overview || project.description,
+          highlights: project.highlights,
+          techStack: project.techStack,
+          tags: project.tags,
+          github: project.repoUrl
         })}
       >
         <div className={styles.parallaxLayer} ref={popRef}>
@@ -97,16 +100,16 @@ function ProjectCard({ project, onOpenLightbox }) {
             loading="lazy"
           />
         </div>
-        <div className={styles.imageOverlay}>
+        <div className={`${styles.imageOverlay} theme-dark`}>
           <ZoomIn size={26} />
-          <span>OPEN LIGHTBOX GALLERY</span>
+          <span>{project.overlayLabel || 'VIEW PROJECT'}</span>
         </div>
 
         {/* Category badge — own independent rise + own pop strength.
             It is absolutely positioned against the image container, so it
             lives outside the image's pop layer. */}
         <Pop strength={10} className="pop-flex">
-          <Reveal as="span" className={styles.categoryBadge}>
+          <Reveal as="span" className={`${styles.categoryBadge} theme-dark`}>
             {project.category}
           </Reveal>
         </Pop>
@@ -119,47 +122,20 @@ function ProjectCard({ project, onOpenLightbox }) {
           <Pop as="span" strength={11} className="pop-inner">{project.title}</Pop>
         </Reveal>
 
-        {/* Short highlighted description — own rise + own pop strength */}
-        <Reveal as="p" className={styles.projectTagline}>
-          <Pop as="span" strength={8} className="pop-inner">{project.tagline}</Pop>
-        </Reveal>
-
-        {/* Full description — own rise + own pop strength */}
+        {/* Short description — own rise + own pop strength */}
         <Reveal as="p" className={styles.projectDesc}>
           <Pop as="span" strength={7} className="pop-inner">{project.description}</Pop>
         </Reveal>
 
-        {/* Technology tags — own rise + own pop strength */}
-        <Reveal className={styles.tagsRow}>
-          <Pop strength={6} className="pop-inner">
-            {project.tags.map((tag, tIdx) => (
-              <span key={tIdx} className="badge">
-                {tag}
-              </span>
-            ))}
-          </Pop>
-        </Reveal>
-
-        {/* Actions — CODE and LIVE DEMO each reveal independently, each
-            with its own subtle pop motion (ActionButton owns it). */}
+        {/* Actions — CODE reveals independently, with its own subtle pop
+            motion (ActionButton owns it). */}
         <div className={styles.actionsRow}>
           <ActionButton
+            primary
             href={project.repoUrl || personalInfo.github}
             icon={<GithubIcon size={15} />}
           >
             CODE
-          </ActionButton>
-          <ActionButton
-            primary
-            onClick={() => onOpenLightbox({
-              src: project.fullImage || project.image,
-              title: project.title,
-              caption: project.description,
-              tags: project.tags
-            })}
-            icon={<ExternalLink size={15} />}
-          >
-            LIVE DEMO
           </ActionButton>
         </div>
       </div>
@@ -194,16 +170,10 @@ export default function Projects({ onOpenLightbox }) {
           {/* 2. Main heading */}
           <Pop strength={12}>
             <Rise as="h2" className="section-title">
-              Projects &amp; <span className="accent">practical builds</span>
+              PROJECTS & <span className="accent">PRACTICAL BUILDS</span>
             </Rise>
           </Pop>
 
-          {/* 3. Description */}
-          <Pop strength={7}>
-            <Rise as="p" className="section-subtitle">
-              Hands-on projects built while learning — applying cloud, security, and AI concepts to real, working tools.
-            </Rise>
-          </Pop>
         </div>
 
         {/* Project Cards Grid */}

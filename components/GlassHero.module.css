@@ -1,8 +1,6 @@
 .heroSection {
-  /* At least one viewport tall — min-height (not a fixed height) so the
-     page can never be locked to exactly one screen (mobile scroll fix).
-     In practice content fits one viewport, so the rendered height is
-     unchanged on desktop/tablet. */
+  /* Exactly one viewport height — no taller, no shorter */
+  height: 100dvh;
   min-height: 100dvh;
   display: flex;
   align-items: center;
@@ -11,15 +9,8 @@
   position: relative;
   z-index: 2;
   overflow: hidden;
-  background-color: #071011;
-  /* MOBILE SCROLL FIX: was `touch-action: none`, which told the browser
-     to swallow ALL touch gestures inside the hero — vertical swipes
-     could never scroll the page. `pan-y` keeps vertical swipe-to-scroll
-     native while taps/stationary touches still reach the radial reveal
-     handlers (a committed swipe fires pointercancel, which the reveal
-     code already handles by closing the circle). Mouse behavior on
-     desktop is unaffected — touch-action only governs touch input. */
-  touch-action: pan-y;
+  background-color: var(--bg);
+  touch-action: none;
 }
 
 /* Layer 1 & 2: Portrait Container — full-bleed, fills the section exactly */
@@ -103,8 +94,8 @@
   pointer-events: none;
   z-index: 3;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(var(--fg-rgb), 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--fg-rgb), 0.03) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
@@ -121,7 +112,7 @@
   right: -100px;
   width: 650px;
   height: 650px;
-  background: radial-gradient(circle, rgba(215, 255, 0, 0.18) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--primary-rgb), 0.18) 0%, transparent 70%);
 }
 
 .glowOrb2 {
@@ -129,7 +120,7 @@
   left: -200px;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(215, 255, 0, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--primary-rgb), 0.1) 0%, transparent 70%);
 }
 
 /* Layer 4 content container — pointer-events:none lets the section
@@ -184,18 +175,8 @@
   margin-top: 40px;
 }
 
-/* Desktop/laptop (≥768px): widen the hero column so the description
-   fits on EXACTLY two lines (its full text measures ≈1955px at the
-   19.2px font — needs ≈1000px). The metric grid is capped back to its
-   original 680px so the three boxes keep their exact previous size. */
-@media (min-width: 768px) {
-  .heroWrapper {
-    max-width: 1040px;
-  }
-
-  .metricsGrid {
-    max-width: 680px;
-  }
+.primaryIcon {
+  color: var(--primary);
 }
 
 .titleContainer {
@@ -204,26 +185,17 @@
 
 .greetingText {
   font-family: var(--font-mono);
-  font-size: var(--text-md);
+  font-size: 0.88rem;
   letter-spacing: 0.22em;
   color: var(--primary);
   margin-bottom: 0.75rem;
-  /* Sentence case per usability audit (17-char all-caps run). */
-}
-
-/* Desktop/laptop only: push the greeting clearly below the fixed header
-   so it never visually collides with the header name. */
-@media (min-width: 768px) {
-  .greetingText {
-    margin-top: 56px;
-  }
+  text-transform: uppercase;
 }
 
 .mainTitle {
   font-family: var(--font-display);
-  /* Responsive font-size: Desktop 57.5-66px (reduced ~12.5% per request),
-     Tablet 55-65px and Mobile 40-48px keep their own rules below. */
-  font-size: clamp(3.59375rem, 4.2vw, 4.125rem);
+  /* Responsive font-size: Desktop 65-75px, Tablet 55-65px, Mobile 40-48px */
+  font-size: clamp(3rem, 3.6vw, 3.5rem);
   font-weight: 800;
   line-height: 0.98;
   letter-spacing: -0.04em;
@@ -235,24 +207,24 @@
 
 @media (max-width: 1024px) {
   .mainTitle {
-    font-size: clamp(3.4375rem, 6.2vw, 4.0625rem);
+    font-size: clamp(2.6rem, 4.8vw, 3rem);
   }
 }
 
 @media (max-width: 640px) {
   .mainTitle {
-    font-size: clamp(2.5rem, 9vw, 3rem);
+    font-size: clamp(2rem, 7vw, 2.4rem);
   }
 }
 
 .titleInitial {
-  color: var(--primary);
+  color: var(--accent-heading);
   text-shadow: var(--glow-accent-strong);
 }
 
 .heroTagline {
   font-family: var(--font-mono);
-  font-size: clamp(var(--text-base), 2.2vw, var(--text-xl));
+  font-size: clamp(1rem, 2.2vw, 1.35rem);
   font-weight: 600;
   letter-spacing: 0.14em;
   color: var(--primary);
@@ -264,15 +236,15 @@
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  background: rgba(17, 29, 31, 0.9);
+  background: rgba(31, 58, 43, 0.9);
   border: 1px solid var(--border-accent);
   padding: 0.65rem 1.2rem;
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
-  font-size: var(--text-base);
+  font-size: 0.92rem;
   color: var(--text);
   margin-bottom: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 20px rgba(51, 43, 28, 0.14);
 }
 
 .rolePrefix {
@@ -297,13 +269,10 @@
 
 .heroDescription {
   font-family: var(--font-body);
-  font-size: var(--text-lg);
+  font-size: clamp(0.9rem, 1.15vw, 1rem);
   line-height: 1.7;
-  color: #d8d8d8;
-  /* Wide enough on laptop/desktop for exactly two lines (see the
-     .heroWrapper media query above); harmless on mobile where the
-     description is hidden. */
-  max-width: 1000px;
+  color: var(--text-body);
+  max-width: 700px;
   margin-bottom: 2.5rem;
 }
 
@@ -354,11 +323,12 @@
     padding-left: 20px;
     padding-right: 20px;
     align-items: flex-start;
-    padding-top: 120px;
+    padding-top: 96px; /* name sits just below the header */
   }
 
   .heroWrapper {
     max-width: 100%;
+    margin-top: 0;
   }
 
   .metricsGrid {
@@ -435,7 +405,7 @@
 .metricValue {
   font-family: var(--font-display);
   /* Responsive size: shrinks on narrow cards so text wraps without overflow */
-  font-size: clamp(var(--text-md), 1.8vw, var(--text-xl));
+  font-size: clamp(0.9rem, 1.8vw, 1.25rem);
   font-weight: 800;
   color: var(--primary);
   letter-spacing: -0.02em;
@@ -448,25 +418,11 @@
 
 .metricLabel {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: 0.74rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   display: block;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   MOBILE ONLY (≤767px): strip the hero down to greeting + name + portrait.
-   Hides tagline (AWS CLOUD × DEVOPS), role bar ($ ACTIVE_ROLE: …), the
-   description paragraph, and all three metric boxes. Desktop is unaffected.
-───────────────────────────────────────────────────────────────────────────── */
-@media (max-width: 767px) {
-  .heroTagline,
-  .roleBar,
-  .heroDescription,
-  .metricsGrid {
-    display: none;
-  }
 }
 
 /* Reduced Motion Override */
@@ -475,5 +431,22 @@
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+}
+
+/* Mobile: hero shows only the greeting and name — tagline, role bar,
+   summary and metric cards are hidden */
+@media (max-width: 767px) {
+  .heroTagline,
+  .roleBar,
+  .heroDescription,
+  .metricsGrid {
+    display: none;
+  }
+
+  /* Scale the name to the screen so "HARSHAVARDHAN" always fits
+     (≈15.5em wide; 40px = left + right padding) */
+  .mainTitle {
+    font-size: min(2.4rem, calc((100vw - 40px) / 15.5));
   }
 }

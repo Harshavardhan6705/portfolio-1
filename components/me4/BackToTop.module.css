@@ -5,7 +5,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: rgba(10, 20, 21, 0.85);
+  background: rgba(31, 58, 43, 0.9);
   border: 1px solid var(--border-accent);
   color: var(--primary);
   display: flex;
@@ -14,14 +14,14 @@
   cursor: pointer;
   z-index: 9980;
   backdrop-filter: blur(12px);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6), var(--glow-accent);
+  box-shadow: 0 4px 25px rgba(51, 43, 28, 0.21), var(--glow-accent);
   transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
 }
 
 .backToTopBtn:hover {
   transform: translateY(-4px);
   background: var(--primary);
-  color: #000000;
+  color: var(--on-primary);
   border-color: var(--primary);
 }
 
@@ -35,7 +35,7 @@
 
 .ringTrack {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.1);
+  stroke: rgba(var(--fg-rgb), 0.1);
   stroke-width: 2.5;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .backToTopBtn:hover .ringFill {
-  stroke: #000000;
+  stroke: var(--on-primary);
 }
 
 .arrowIcon {
